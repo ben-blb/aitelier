@@ -1,3 +1,4 @@
+import 'package:aitelier/presentation/features/workspace/workspace_page.dart';
 import 'package:flutter/material.dart';
 
 class AppScaffold extends StatelessWidget {
@@ -5,13 +6,6 @@ class AppScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text(
-          'Aitelier booted',
-          style: TextStyle(fontSize: 18),
-        ),
-      ),
-    );
+    return const Scaffold(body: WorkspacePage());
   }
 }
