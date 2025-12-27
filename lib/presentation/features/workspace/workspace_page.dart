@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../../application/use_cases/projects/create_project.dart';
 import '../../../application/use_cases/projects/list_projects.dart';
 import '../../../application/use_cases/projects/delete_project.dart';
 import '../../../domain/entities/project.dart';
+import '../../../infrastructure/storage/local_file_system.dart';
 import '../../../infrastructure/storage/local_project_repository.dart';
 import '../../../infrastructure/storage/local_workspace_storage.dart';
 
@@ -16,14 +18,38 @@ class WorkspacePage extends StatefulWidget {
 
 class _WorkspacePageState extends State<WorkspacePage> {
   late final LocalProjectRepository repository;
+  String? basePath;
+  final fs = LocalFileSystem();
   List<Project> projects = [];
+
+  Future<void> _resolveBasePath() async {
+    final dir = await getApplicationSupportDirectory();
+    basePath = dir.path;
+  }
 
   @override
   void initState() {
     super.initState();
-    repository = LocalProjectRepository(LocalWorkspaceStorage());
-    _load();
+    _init();
   }
+
+  Future<void> _init() async {
+    await _resolveBasePath();
+    final fs = LocalFileSystem();
+
+    final workspaceStorage = LocalWorkspaceStorage(
+      fs: fs,
+      basePath: basePath!,
+    );
+
+    repository = LocalProjectRepository(
+      fs: fs,
+      workspaceStorage: workspaceStorage,
+    );
+
+    await _load();
+  }
+
 
   Future<void> _load() async {
     final list = await ListProjects(repository).execute();

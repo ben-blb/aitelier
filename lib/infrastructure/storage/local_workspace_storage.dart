@@ -1,54 +1,58 @@
 import 'dart:convert';
-import 'dart:io';
-
-import 'package:path_provider/path_provider.dart';
 
 import '../../domain/entities/workspace.dart';
 import '../../domain/services/workspace_storage.dart';
+import '../../domain/services/file_system.dart';
 
 class LocalWorkspaceStorage implements WorkspaceStorage {
   static const _settingsFile = 'workspace.settings.json';
+  static const _workspaceDirName = 'workspaces';
+
+  final FileSystem fs;
+  final String basePath;
+
+  LocalWorkspaceStorage({
+    required this.fs,
+    required this.basePath,
+  });
 
   @override
   Future<Workspace?> load() async {
-    final root = await _resolveRoot();
-    final file = File('${root.path}/$_settingsFile');
+    final rootPath = '$basePath/$_workspaceDirName';
+    final settingsPath = '$rootPath/$_settingsFile';
 
-    if (!file.existsSync()) {
+    final exists = await fs.exists(settingsPath);
+    if (!exists) {
       return null;
     }
 
-    final data = jsonDecode(file.readAsStringSync());
+    final raw = await fs.readFile(settingsPath);
+    final data = jsonDecode(raw);
+
     return Workspace(
-      rootPath: root.path,
+      rootPath: rootPath,
       createdAt: DateTime.parse(data['createdAt']),
     );
   }
 
   @override
   Future<Workspace> create() async {
-    final root = await _resolveRoot();
-    if (!root.existsSync()) {
-      root.createSync(recursive: true);
-    }
+    final rootPath = '$basePath/$_workspaceDirName';
+    await fs.createDirectory(rootPath);
 
     final workspace = Workspace(
-      rootPath: root.path,
+      rootPath: rootPath,
       createdAt: DateTime.now(),
     );
 
-    final file = File('${root.path}/$_settingsFile');
-    file.writeAsStringSync(
+    final settingsPath = '$rootPath/$_settingsFile';
+    await fs.writeFileAtomic(
+      settingsPath,
       jsonEncode({
         'createdAt': workspace.createdAt.toIso8601String(),
       }),
     );
 
     return workspace;
-  }
-
-  Future<Directory> _resolveRoot() async {
-    final base = await getApplicationSupportDirectory();
-    return Directory('${base.path}/');
   }
 }

@@ -1,20 +1,24 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:uuid/uuid.dart';
 
 import '../../domain/entities/project.dart';
 import '../../domain/services/project_repository.dart';
+import '../../domain/services/file_system.dart';
 import 'local_workspace_storage.dart';
 
 class LocalProjectRepository implements ProjectRepository {
-  static const _projectsDirName = 'projects';
-  static const _indexFileName = 'index.json';
+  static const _projectsDir = 'projects';
+  static const _indexFile = 'index.json';
 
-  final _uuid = const Uuid();
+  final FileSystem fs;
   final LocalWorkspaceStorage workspaceStorage;
+  final _uuid = const Uuid();
 
-  LocalProjectRepository(this.workspaceStorage);
+  LocalProjectRepository({
+    required this.fs,
+    required this.workspaceStorage,
+  });
 
   @override
   Future<List<Project>> list() async {
@@ -23,13 +27,17 @@ class LocalProjectRepository implements ProjectRepository {
       return [];
     }
 
-    final indexFile = _indexFile(workspace.rootPath);
-    if (!indexFile.existsSync()) {
+    final indexPath =
+        '${workspace.rootPath}/$_projectsDir/$_indexFile';
+
+    if (!await fs.exists(indexPath)) {
       return [];
     }
 
-    final raw = jsonDecode(indexFile.readAsStringSync()) as List;
-    return raw.map((e) {
+    final raw = await fs.readFile(indexPath);
+    final list = jsonDecode(raw) as List;
+
+    return list.map((e) {
       return Project(
         id: e['id'],
         name: e['name'],
@@ -47,23 +55,24 @@ class LocalProjectRepository implements ProjectRepository {
       throw Exception('Workspace not initialized');
     }
 
-    final projectsDir =
-        Directory('${workspace.rootPath}/$_projectsDirName');
-    projectsDir.createSync(recursive: true);
+    final projectsRoot =
+        '${workspace.rootPath}/$_projectsDir';
+    await fs.createDirectory(projectsRoot);
 
     final id = _uuid.v4();
-    final projectDir = Directory('${projectsDir.path}/$id');
-    projectDir.createSync();
+    final projectRoot = '$projectsRoot/$id';
+    await fs.createDirectory(projectRoot);
 
     final project = Project(
       id: id,
       name: name,
       description: description,
       createdAt: DateTime.now(),
-      rootPath: projectDir.path,
+      rootPath: projectRoot,
     );
 
-    File('${projectDir.path}/project.json').writeAsStringSync(
+    await fs.writeFileAtomic(
+      '$projectRoot/project.json',
       jsonEncode({
         'id': project.id,
         'name': project.name,
@@ -75,8 +84,9 @@ class LocalProjectRepository implements ProjectRepository {
     final projects = await list();
     final updated = [...projects, project];
 
-    _indexFile(workspace.rootPath).writeAsStringSync(
-      jsonEncode(updated.map(_toIndexEntry).toList()),
+    await fs.writeFileAtomic(
+      '$projectsRoot/$_indexFile',
+      jsonEncode(updated.map(_toIndex).toList()),
     );
 
     return project;
@@ -93,23 +103,17 @@ class LocalProjectRepository implements ProjectRepository {
     final remaining =
         projects.where((p) => p.id != projectId).toList();
 
-    final dir = Directory(
-      '${workspace.rootPath}/$_projectsDirName/$projectId',
+    await fs.deleteDirectory(
+      '${workspace.rootPath}/$_projectsDir/$projectId',
     );
-    if (dir.existsSync()) {
-      dir.deleteSync(recursive: true);
-    }
 
-    _indexFile(workspace.rootPath).writeAsStringSync(
-      jsonEncode(remaining.map(_toIndexEntry).toList()),
+    await fs.writeFileAtomic(
+      '${workspace.rootPath}/$_projectsDir/$_indexFile',
+      jsonEncode(remaining.map(_toIndex).toList()),
     );
   }
 
-  File _indexFile(String root) {
-    return File('$root/$_projectsDirName/$_indexFileName');
-  }
-
-  Map<String, dynamic> _toIndexEntry(Project p) {
+  Map<String, dynamic> _toIndex(Project p) {
     return {
       'id': p.id,
       'name': p.name,
