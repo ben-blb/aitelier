@@ -61,7 +61,7 @@ class _WorkspacePageState extends State<WorkspacePage> {
   }
 
   Future<void> _create() async {
-    await CreateProject(repository: repository, git: git).execute('New Project ${projects.length}', 'Project description');
+    await CreateProject(repository: repository, git: git).execute(name: 'New Project ${projects.length}', description: 'Project description', remoteUrl:  '');
     await _load();
   }
 

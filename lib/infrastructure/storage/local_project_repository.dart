@@ -44,12 +44,52 @@ class LocalProjectRepository implements ProjectRepository {
         description: e['description'],
         createdAt: DateTime.parse(e['createdAt']),
         rootPath: e['rootPath'],
+        remoteUrl: e['remoteUrl'],
       );
     }).toList();
   }
 
   @override
-  Future<Project> create(String name, String description) async {
+  Future<Project> getById(String projectId) async {
+    final workspace = await workspaceStorage.load();
+    if (workspace == null) {
+      throw Exception('Project not found');
+    }
+
+    final projectPath = '${workspace.rootPath}/$_projectsDir/$projectId';
+    final filePath = '$projectPath/project.json';
+
+    final contents = await fs.readFile(filePath);
+    final data = jsonDecode(contents);
+
+    return Project(
+      id: data['id'],
+      name: data['name'],
+      description: data['description'],
+      createdAt: DateTime.parse(data['createdAt']),
+      rootPath: data['rootPath'],
+      remoteUrl: data['remoteUrl'],
+    );
+  }
+
+  @override
+  Future<void> save(Project project) async {
+    final filePath = '${project.rootPath}/project.json';
+
+    final json = jsonEncode({
+      'id': project.id,
+      'name': project.name,
+      'description': project.description,
+      'createdAt': project.createdAt.toIso8601String(),
+      'rootPath': project.rootPath,
+      'remoteUrl': project.remoteUrl,
+    });
+
+    await fs.writeFileAtomic(filePath, json);
+  }
+
+  @override
+  Future<Project> create(String name, String description, String? remoteUrl) async {
     final workspace = await workspaceStorage.load();
     if (workspace == null) {
       throw Exception('Workspace not initialized');
@@ -69,6 +109,7 @@ class LocalProjectRepository implements ProjectRepository {
       description: description,
       createdAt: DateTime.now(),
       rootPath: projectRoot,
+      remoteUrl: remoteUrl
     );
 
     await fs.writeFileAtomic(
@@ -77,6 +118,7 @@ class LocalProjectRepository implements ProjectRepository {
         'id': project.id,
         'name': project.name,
         'description': project.description,
+        'remoteUrl': project.remoteUrl,
         'createdAt': project.createdAt.toIso8601String(),
       }),
     );
@@ -118,6 +160,7 @@ class LocalProjectRepository implements ProjectRepository {
       'id': p.id,
       'name': p.name,
       'description': p.description,
+      'remoteUrl': p.remoteUrl,
       'createdAt': p.createdAt.toIso8601String(),
       'rootPath': p.rootPath,
     };

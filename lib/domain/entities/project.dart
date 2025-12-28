@@ -4,6 +4,7 @@ class Project {
   final String description;
   final DateTime createdAt;
   final String rootPath;
+  final String? remoteUrl;
 
   Project({
     required this.id,
@@ -11,5 +12,18 @@ class Project {
     required this.description,
     required this.createdAt,
     required this.rootPath,
+    this.remoteUrl
   });
+
+  
+  Project copyWith({String? remoteUrl}) {
+    return Project(
+      id: id,
+      name: name,
+      rootPath: rootPath,
+      description: description,
+      createdAt: createdAt,
+      remoteUrl: remoteUrl ?? this.remoteUrl,
+    );
+  }
 }
