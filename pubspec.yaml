@@ -9,6 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_secure_storage: ^10.0.0
   git: ^2.3.2
   logger: ^2.6.2
   path_provider: ^2.1.5
