@@ -89,20 +89,32 @@ class LocalProjectRepository implements ProjectRepository {
   }
 
   @override
-  Future<Project> create(String name, String description, String? remoteUrl) async {
+  Future<({
+    String projectsRoot,
+    String id,
+    String projectRoot,
+  })> createProjectDir(String name) async {
     final workspace = await workspaceStorage.load();
     if (workspace == null) {
       throw Exception('Workspace not initialized');
     }
 
-    final projectsRoot =
-        '${workspace.rootPath}/$_projectsDir';
+    final projectsRoot = '${workspace.rootPath}/$_projectsDir';
     await fs.createDirectory(projectsRoot);
 
     final id = _uuid.v4();
     final projectRoot = '$projectsRoot/$id';
     await fs.createDirectory(projectRoot);
 
+    return (
+      projectsRoot: projectsRoot,
+      id: id,
+      projectRoot: projectRoot,
+    );
+  }
+
+  @override
+  Future<Project> create(String projectRoot, String id, String projectsRoot, String name, String description, String? remoteUrl) async {    
     final project = Project(
       id: id,
       name: name,

@@ -16,12 +16,21 @@ class CreateProject {
     required String description,
     String? remoteUrl,
   }) async {
-    var project = await repository.create(name, description, remoteUrl);
+    final createdDir = await repository.createProjectDir(name);
+    await git.initRepository(createdDir.projectRoot);
 
-    await git.initRepository(project.rootPath);
+    var project = await repository.create(
+      createdDir.projectRoot,
+      createdDir.id,
+      createdDir.projectsRoot,
+      name,
+      description,
+      remoteUrl
+    );
+
     await git.commitAll(project.rootPath, 'state: project created');
 
-    if (remoteUrl != null) {
+    if (remoteUrl != null && remoteUrl.trim().isNotEmpty) {
       await git.addRemote(project.rootPath, remoteUrl);
       project = project.copyWith(remoteUrl: remoteUrl);
       await repository.save(project);
