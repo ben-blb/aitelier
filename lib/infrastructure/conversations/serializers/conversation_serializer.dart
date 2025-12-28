@@ -6,10 +6,7 @@ class ConversationSerializer {
     return {
       'id': record.id,
       'projectId': record.projectId,
-      'purpose': {
-        'key': record.purposeKey,
-        'description': record.purposeDescription,
-      },
+      'purpose': record.purposeKey,
       'createdAt': record.createdAt.toIso8601String(),
       'updatedAt': record.updatedAt.toIso8601String(),
       'isArchived': record.isArchived,
@@ -21,7 +18,6 @@ class ConversationSerializer {
       id: json['id'],
       projectId: json['projectId'],
       purposeKey: json['purpose']['key'],
-      purposeDescription: json['purpose']['description'],
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt: DateTime.parse(json['updatedAt']),
       isArchived: json['isArchived'],
