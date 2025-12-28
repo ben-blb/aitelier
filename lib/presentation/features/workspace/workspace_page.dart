@@ -5,6 +5,7 @@ import '../../../application/use_cases/projects/create_project.dart';
 import '../../../application/use_cases/projects/list_projects.dart';
 import '../../../application/use_cases/projects/delete_project.dart';
 import '../../../domain/entities/project.dart';
+import '../../../infrastructure/git/local_git_service.dart';
 import '../../../infrastructure/storage/local_file_system.dart';
 import '../../../infrastructure/storage/local_project_repository.dart';
 import '../../../infrastructure/storage/local_workspace_storage.dart';
@@ -20,6 +21,7 @@ class _WorkspacePageState extends State<WorkspacePage> {
   late final LocalProjectRepository repository;
   String? basePath;
   final fs = LocalFileSystem();
+  final git = LocalGitService();
   List<Project> projects = [];
 
   Future<void> _resolveBasePath() async {
@@ -59,7 +61,7 @@ class _WorkspacePageState extends State<WorkspacePage> {
   }
 
   Future<void> _create() async {
-    await CreateProject(repository).execute('New Project ${projects.length}', 'Project description');
+    await CreateProject(repository: repository, git: git).execute('New Project ${projects.length}', 'Project description');
     await _load();
   }
 
