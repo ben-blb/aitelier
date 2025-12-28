@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/services.dart';
 import '../../utils/logger.dart';
 import './purpose_loader.dart';
@@ -11,12 +10,10 @@ class PurposeFolderLoader {
   }) async {
     appLogger.i('Loading purposes from folder: $folderPath');
 
-    final manifestContent =
-        await rootBundle.loadString('AssetManifest.json');
-    final manifestMap =
-        jsonDecode(manifestContent) as Map<String, dynamic>;
-
-    final purposeFiles = manifestMap.keys
+    final manifest = await AssetManifest.loadFromAssetBundle(rootBundle);
+    
+    final purposeFiles = manifest
+        .listAssets()
         .where(
           (path) =>
               path.startsWith(folderPath) && path.endsWith('.json'),
@@ -38,7 +35,7 @@ class PurposeFolderLoader {
           error: e,
           stackTrace: stack,
         );
-        rethrow;
+        rethrow; 
       }
     }
 
