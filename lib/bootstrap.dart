@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'core/utils/logger.dart';
 import 'app.dart';
+import 'infrastructure/database/sqlite_database.dart';
 
 void bootstrapApp() {
   runZonedGuarded(
@@ -15,6 +16,7 @@ void bootstrapApp() {
         );
       };
 
+      SqliteDatabase.open();
       runApp(const AitelierApp());
     },
     (error, stack) {
