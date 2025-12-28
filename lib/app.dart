@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'core/purpose/loader/purpose_registry.dart';
 import 'presentation/app_shell/app_scaffold.dart';
 
 class AitelierApp extends StatelessWidget {
-  const AitelierApp({super.key});
+  final PurposeRegistry purposeRegistry;
+  
+  const AitelierApp({
+    super.key,
+    required this.purposeRegistry,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -1,0 +1,12 @@
+{
+  "key": "general",
+  "name": "General Assistant",
+  "description": "General purpose conversation with no strict constraints",
+  "system_directive": "You are a helpful, clear, and concise assistant.",
+  "constraints": {
+    "allow_off_topic": true,
+    "max_context_tokens": 6000,
+    "tone": "neutral",
+    "forbidden_topics": []
+  }
+}
