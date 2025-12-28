@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:io'; // Added for Platform check
 import 'package:flutter/material.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart'; // Added for FFI init
 
 import 'core/utils/logger.dart';
 import 'app.dart';
@@ -10,6 +12,13 @@ import 'core/purpose/loader/purpose_registry.dart';
 Future<void> bootstrapApp() async {
   runZonedGuarded(
     () async {
+      WidgetsFlutterBinding.ensureInitialized();
+      
+      if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+        sqfliteFfiInit();
+        databaseFactory = databaseFactoryFfi;
+      }
+
       FlutterError.onError = (details) {
         appLogger.e(
           'Flutter framework error',
