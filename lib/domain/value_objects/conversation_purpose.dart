@@ -1,17 +1,17 @@
 class ConversationPurpose {
-  final String key;
-  final String description;
+  final String value;
 
-  const ConversationPurpose({
-    required this.key,
-    required this.description,
-  });
+  ConversationPurpose(this.value){
+    if(value.isEmpty){
+      throw ArgumentError('Purpose cannot be empty');
+    }
+  }
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ConversationPurpose && key == other.key;
+      other is ConversationPurpose && value == other.value;
 
   @override
-  int get hashCode => key.hashCode;
+  int get hashCode => value.hashCode;
 }

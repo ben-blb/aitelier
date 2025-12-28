@@ -16,7 +16,6 @@ class SqliteConversationDao {
         'id': record.id,
         'project_id': record.projectId,
         'purpose_key': record.purposeKey,
-        'purpose_description': record.purposeDescription,
         'created_at': record.createdAt.toIso8601String(),
         'updated_at': record.updatedAt.toIso8601String(),
         'is_archived': record.isArchived ? 1 : 0,
@@ -39,6 +38,23 @@ class SqliteConversationDao {
       {
         'purpose_key': purposeKey,
         'purpose_description': purposeDescription,
+        'updated_at': DateTime.now().toIso8601String(),
+      },
+      where: 'id = ?',
+      whereArgs: [conversationId],
+    );
+  }
+
+  Future<void> update(
+    String conversationId,
+  ) async {
+    appLogger.i(
+      'Updating conversation $conversationId',
+    );
+
+    await db.update(
+      'conversations',
+      {
         'updated_at': DateTime.now().toIso8601String(),
       },
       where: 'id = ?',

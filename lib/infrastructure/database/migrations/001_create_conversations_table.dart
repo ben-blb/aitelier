@@ -17,6 +17,8 @@ class CreateConversationsTableMigration implements Migration {
       CREATE TABLE conversations (
         id TEXT PRIMARY KEY,
         project_id TEXT NOT NULL,
+        title TEXT NOT NULL,        
+        status TEXT NOT NULL,
         purpose_key TEXT NOT NULL,
         purpose_description TEXT NOT NULL,
         created_at TEXT NOT NULL,

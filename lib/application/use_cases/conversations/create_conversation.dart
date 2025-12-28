@@ -19,20 +19,18 @@ class CreateConversationUseCase {
   Future<Conversation> execute({
     required ConversationId id,
     required ProjectId projectId,
+    required String title,
     ConversationPurpose? purpose,
   }) async {
-    final resolvedPurpose = purpose ??
-        const ConversationPurpose(
-          key: 'general',
-          description: 'General conversation',
-        );
+    final resolvedPurpose = purpose ?? ConversationPurpose('general');
 
     appLogger.i(
-      'Creating conversation ${id.value} with purpose ${resolvedPurpose.key}',
+      'Creating conversation ${id.value} with purpose ${resolvedPurpose.value}',
     );
 
     final conversation = Conversation.create(
       id: id,
+      title: title,
       projectId: projectId,
       purpose: resolvedPurpose,
     );
@@ -40,8 +38,7 @@ class CreateConversationUseCase {
     final record = ConversationRecord(
       id: id.value,
       projectId: projectId.value,
-      purposeKey: resolvedPurpose.key,
-      purposeDescription: resolvedPurpose.description,
+      purposeKey: resolvedPurpose.value,
       createdAt: conversation.metadata.createdAt,
       updatedAt: conversation.metadata.updatedAt,
       isArchived: conversation.metadata.isArchived,
