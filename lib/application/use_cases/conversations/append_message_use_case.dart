@@ -1,3 +1,5 @@
+import 'package:aitelier/domain/value_objects/project_id.dart';
+
 import '../../../core/utils/logger.dart';
 import '../../../domain/services/conversation_git_hook.dart';
 import '../../../domain/value_objects/conversation_id.dart';
@@ -17,6 +19,7 @@ class AppendMessageUseCase {
   });
 
   Future<void> execute({
+    required ProjectId projectId,
     required ConversationId conversationId,
     required ConversationMessageRecord message,
   }) async {
@@ -24,13 +27,18 @@ class AppendMessageUseCase {
       'Appending message | conversation=${conversationId.value}',
     );
 
-    await fileStore.appendMessage(conversationId.value, message);
+    await fileStore.appendMessage(
+      projectId.value,
+      conversationId.value,
+      message
+    );
 
     await sqliteDao.update(conversationId.value);
 
     await gitHook.onMessageAppended(
       conversationId: conversationId,
       purpose: message.role,
+      projectId: projectId
     );
   }
 }

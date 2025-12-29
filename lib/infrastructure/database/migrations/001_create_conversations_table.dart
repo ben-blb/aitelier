@@ -20,7 +20,6 @@ class CreateConversationsTableMigration implements Migration {
         title TEXT NOT NULL,        
         status TEXT NOT NULL,
         purpose_key TEXT NOT NULL,
-        purpose_description TEXT NOT NULL,
         created_at TEXT NOT NULL,
         updated_at TEXT NOT NULL,
         is_archived INTEGER NOT NULL

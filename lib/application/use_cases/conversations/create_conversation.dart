@@ -1,3 +1,5 @@
+import 'package:aitelier/domain/value_objects/conversation_status.dart';
+
 import '../../../core/utils/logger.dart';
 import '../../../domain/entities/conversation.dart';
 import '../../../domain/value_objects/conversation_id.dart';
@@ -39,6 +41,8 @@ class CreateConversationUseCase {
       id: id.value,
       projectId: projectId.value,
       purposeKey: resolvedPurpose.value,
+      title: title,
+      status: ConversationStatus.active, // always active by default
       createdAt: conversation.metadata.createdAt,
       updatedAt: conversation.metadata.updatedAt,
       isArchived: conversation.metadata.isArchived,

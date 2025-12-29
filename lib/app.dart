@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'app_container.dart';
 import 'core/purpose/loader/purpose_registry.dart';
-import 'presentation/app_shell/app_scaffold.dart';
+import 'presentation/features/workspace/workspace_page.dart';
 
 class AitelierApp extends StatelessWidget {
   final PurposeRegistry purposeRegistry;
+  final AppContainer container;
   
   const AitelierApp({
     super.key,
     required this.purposeRegistry,
+    required this.container
   });
 
   @override
@@ -20,7 +23,7 @@ class AitelierApp extends StatelessWidget {
         useMaterial3: true,
         colorSchemeSeed: Colors.deepPurple,
       ),
-      home: const AppScaffold(),
+      home: Scaffold(body: WorkspacePage(container: container,)),
     );
   }
 }

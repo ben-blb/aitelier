@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'dart:io'; // Added for Platform check
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart'; // Added for FFI init
+import 'package:path/path.dart' as p;
 
+import 'app_container.dart';
 import 'core/utils/logger.dart';
 import 'app.dart';
 import 'infrastructure/database/sqlite_database.dart';
@@ -32,6 +35,10 @@ Future<void> bootstrapApp() async {
       appLogger.i('Initializing SQLite');
       final db = await SqliteDatabase.open();
       appLogger.i('SQLite DB path: ${db.path}');
+      
+      final rootDir = await getApplicationSupportDirectory();
+      final projectsDir = Directory(p.join(rootDir.path, 'workspaces', 'projects'));
+      await projectsDir.create(recursive: true);
 
       appLogger.i('Initializing purpose registry');
       final purposeRegistry = PurposeRegistry();
@@ -41,6 +48,11 @@ Future<void> bootstrapApp() async {
         registry: purposeRegistry,
       );
 
+      final container = AppContainer(
+        database: db,
+        projectsRoot: projectsDir,
+      );
+
       appLogger.i(
         'Bootstrap completed. Loaded ${purposeRegistry.listAll().length} purposes',
       );
@@ -48,6 +60,7 @@ Future<void> bootstrapApp() async {
       runApp(
         AitelierApp(
           purposeRegistry: purposeRegistry,
+          container: container,
         ),
       );
     },

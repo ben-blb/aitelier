@@ -1,4 +1,5 @@
 import 'dart:convert';
+import '../../../domain/value_objects/conversation_status.dart';
 import '../models/conversation_record.dart';
 
 class ConversationSerializer {
@@ -7,6 +8,8 @@ class ConversationSerializer {
       'id': record.id,
       'projectId': record.projectId,
       'purpose': record.purposeKey,
+      'title': record.title,
+      'status': record.status.name,
       'createdAt': record.createdAt.toIso8601String(),
       'updatedAt': record.updatedAt.toIso8601String(),
       'isArchived': record.isArchived,
@@ -17,7 +20,13 @@ class ConversationSerializer {
     return ConversationRecord(
       id: json['id'],
       projectId: json['projectId'],
-      purposeKey: json['purpose']['key'],
+      title: json['title'],
+      
+      status: ConversationStatus.values.firstWhere(
+        (e) => e.name == json['status'],
+        orElse: () => ConversationStatus.active,
+      ),
+      purposeKey: json['purpose'], 
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt: DateTime.parse(json['updatedAt']),
       isArchived: json['isArchived'],

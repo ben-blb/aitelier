@@ -15,6 +15,8 @@ class SqliteConversationDao {
       {
         'id': record.id,
         'project_id': record.projectId,
+        'title': record.title,
+        'status': record.status.name,
         'purpose_key': record.purposeKey,
         'created_at': record.createdAt.toIso8601String(),
         'updated_at': record.updatedAt.toIso8601String(),
@@ -37,7 +39,6 @@ class SqliteConversationDao {
       'conversations',
       {
         'purpose_key': purposeKey,
-        'purpose_description': purposeDescription,
         'updated_at': DateTime.now().toIso8601String(),
       },
       where: 'id = ?',

@@ -1,17 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../../../app_container.dart';
 import '../../../application/use_cases/projects/create_project.dart';
 import '../../../application/use_cases/projects/list_projects.dart';
 import '../../../application/use_cases/projects/delete_project.dart';
 import '../../../domain/entities/project.dart';
+import '../../../domain/value_objects/project_id.dart';
 import '../../../infrastructure/git/local_git_service.dart';
 import '../../../infrastructure/storage/local_file_system.dart';
 import '../../../infrastructure/storage/local_project_repository.dart';
 import '../../../infrastructure/storage/local_workspace_storage.dart';
+import '../conversation/project_conversations_screen.dart';
 
 class WorkspacePage extends StatefulWidget {
-  const WorkspacePage({super.key});
+  final AppContainer container;
+  
+  WorkspacePage({
+    super.key,
+    required this.container
+  });
 
   @override
   State<WorkspacePage> createState() => _WorkspacePageState();
@@ -82,6 +90,17 @@ class _WorkspacePageState extends State<WorkspacePage> {
           return ListTile(
             title: Text(p.name),
             subtitle: Text(p.id),
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => ProjectConversationsScreen(
+                    projectId: ProjectId(p.id),
+                    projectName: p.name,
+                    container: widget.container,
+                  ),
+                ),
+              );
+            },
             trailing: IconButton(
               icon: const Icon(Icons.delete),
               onPressed: () => _delete(p.id),

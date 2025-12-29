@@ -22,7 +22,8 @@ class ArchiveConversationUseCase {
     );
 
     await fileStore.appendMessage(
-      archived.id.value,
+      archived.projectId.value,
+      conversation.id.value,
       ConversationMessageRecord(
         role: 'system',
         content: 'archived',
