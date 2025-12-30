@@ -35,14 +35,16 @@ class _ConversationScreenState extends State<ConversationScreen> {
   }
 
   Future<void> _loadMessages() async {
-    setState(() async {
-      messages = await widget.
-                        container
-                        .getConversationMessagesUseCase
-                        .execute(
-                          projectId: widget.projectId,
-                          conversationId: ConversationId(widget.conversationId)
-                        );
+    final newMessages = await widget.container
+        .getConversationMessagesUseCase
+        .execute(
+          projectId: widget.projectId,
+          conversationId: ConversationId(widget.conversationId),
+        );
+
+    if (!mounted) return;
+    setState(() {
+      messages = newMessages;
     });
   }
 
