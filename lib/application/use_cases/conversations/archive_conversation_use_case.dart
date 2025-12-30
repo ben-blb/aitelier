@@ -1,17 +1,17 @@
+import 'package:aitelier/infrastructure/conversations/drift_conversation_repository.dart';
 import 'package:aitelier/infrastructure/conversations/models/conversation_message_record.dart';
 
 import '../../../core/utils/logger.dart';
 import '../../../domain/entities/conversation.dart';
-import '../../../infrastructure/conversations/models/sqlite_conversation_dao.dart';
 import '../../../infrastructure/storage/file_conversation_store.dart';
 
 class ArchiveConversationUseCase {
   final FileConversationStore fileStore;
-  final SqliteConversationDao sqliteDao;
+  final DriftConversationRepository conversationRepository;
 
   ArchiveConversationUseCase({
     required this.fileStore,
-    required this.sqliteDao,
+    required this.conversationRepository,
   });
 
   Future<void> execute(Conversation conversation) async {
@@ -29,6 +29,6 @@ class ArchiveConversationUseCase {
         content: 'archived',
         timestamp: archived.metadata.updatedAt
       ));
-    await sqliteDao.update(archived.id.value);
+    await conversationRepository.touch(archived.id);
   }
 }

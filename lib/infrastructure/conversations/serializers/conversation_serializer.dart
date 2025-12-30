@@ -1,43 +1,50 @@
 import 'dart:convert';
+import 'package:aitelier/domain/entities/conversation.dart';
+import 'package:aitelier/domain/entities/conversation_metadata.dart';
+import 'package:aitelier/domain/value_objects/conversation_id.dart';
+import 'package:aitelier/domain/value_objects/conversation_purpose.dart';
+import 'package:aitelier/domain/value_objects/project_id.dart';
+
 import '../../../domain/value_objects/conversation_status.dart';
-import '../models/conversation_record.dart';
+
 
 class ConversationSerializer {
-  static Map<String, dynamic> toJson(ConversationRecord record) {
+  static Map<String, dynamic> toJson(Conversation record) {
     return {
-      'id': record.id,
-      'projectId': record.projectId,
-      'purpose': record.purposeKey,
+      'id': record.id.value,
+      'projectId': record.projectId.value,
+      'purpose': record.purpose.value,
       'title': record.title,
       'status': record.status.name,
-      'createdAt': record.createdAt.toIso8601String(),
-      'updatedAt': record.updatedAt.toIso8601String(),
-      'isArchived': record.isArchived,
+      'createdAt': record.metadata.createdAt.toIso8601String(),
+      'updatedAt': record.metadata.updatedAt.toIso8601String(),
+      'isArchived': record.metadata.isArchived,
     };
   }
 
-  static ConversationRecord fromJson(Map<String, dynamic> json) {
-    return ConversationRecord(
-      id: json['id'],
-      projectId: json['projectId'],
+  static Conversation fromJson(Map<String, dynamic> json) {
+    return Conversation(
+      id: ConversationId(json['id']),
+      projectId: ProjectId(json['projectId']),
       title: json['title'],
-      
       status: ConversationStatus.values.firstWhere(
         (e) => e.name == json['status'],
         orElse: () => ConversationStatus.active,
       ),
-      purposeKey: json['purpose'], 
-      createdAt: DateTime.parse(json['createdAt']),
-      updatedAt: DateTime.parse(json['updatedAt']),
-      isArchived: json['isArchived'],
+      purpose: ConversationPurpose(json['purpose']),
+      metadata: ConversationMetadata(
+        createdAt: DateTime.parse(json['createdAt']),
+        updatedAt: DateTime.parse(json['updatedAt']),
+        isArchived: json['isArchived']
+      )
     );
   }
 
-  static String encode(ConversationRecord record) {
+  static String encode(Conversation record) {
     return jsonEncode(toJson(record));
   }
 
-  static ConversationRecord decode(String raw) {
+  static Conversation decode(String raw) {
     return fromJson(jsonDecode(raw));
   }
 }

@@ -3,18 +3,18 @@ import 'package:aitelier/domain/value_objects/project_id.dart';
 import '../../../core/utils/logger.dart';
 import '../../../domain/services/conversation_git_hook.dart';
 import '../../../domain/value_objects/conversation_id.dart';
+import '../../../infrastructure/conversations/drift_conversation_repository.dart';
 import '../../../infrastructure/conversations/models/conversation_message_record.dart';
-import '../../../infrastructure/conversations/models/sqlite_conversation_dao.dart';
 import '../../../infrastructure/storage/file_conversation_store.dart';
 
 class AppendMessageUseCase {
   final FileConversationStore fileStore;
-  final SqliteConversationDao sqliteDao;
+  final DriftConversationRepository conversationRepository;
   final ConversationGitHook gitHook;
 
   AppendMessageUseCase({
     required this.fileStore,
-    required this.sqliteDao,
+    required this.conversationRepository,
     required this.gitHook
   });
 
@@ -33,7 +33,7 @@ class AppendMessageUseCase {
       message
     );
 
-    await sqliteDao.update(conversationId.value);
+    await conversationRepository.touch(conversationId);
 
     await gitHook.onMessageAppended(
       conversationId: conversationId,

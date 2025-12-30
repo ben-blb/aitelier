@@ -1,9 +1,9 @@
 import 'dart:io';
+import 'package:aitelier/domain/entities/conversation.dart';
 import 'package:path/path.dart' as p;
 import 'package:aitelier/core/utils/logger.dart';
 
 import '../conversations/models/conversation_index_record.dart';
-import '../conversations/models/conversation_record.dart';
 import '../conversations/models/conversation_message_record.dart';
 import '../conversations/serializers/conversation_index_serializer.dart';
 import '../conversations/serializers/conversation_serializer.dart';
@@ -31,8 +31,8 @@ class FileConversationStore {
     return File(p.join(_conversationDir(id, projectId).path, 'index.json'));
   }
 
-  Future<void> createConversation(ConversationRecord record) async {
-    final dir = _conversationDir(record.id, record.projectId);
+  Future<void> createConversation(Conversation record) async {
+    final dir = _conversationDir(record.id.value, record.projectId.value);
     
     appLogger.i('Creating conversation at: ${dir.path}');
 
@@ -46,18 +46,18 @@ class FileConversationStore {
     }
 
     ConversationIndexRecord conversationIndexRecord = ConversationIndexRecord(
-                                                        id: record.id,
+                                                        id: record.id.value,
                                                         messageCount: 0,
                                                         lastMessageAt: DateTime.now(),
                                                         lastRole: 'system'
                                                       );
 
-    await _metaFile(record.id, record.projectId)
+    await _metaFile(record.id.value, record.projectId.value)
         .writeAsString(ConversationSerializer.encode(record));
 
-    await _messagesFile(record.id, record.projectId).create();
+    await _messagesFile(record.id.value, record.projectId.value).create();
 
-    await _indexFile(record.id, record.projectId).writeAsString(
+    await _indexFile(record.id.value, record.projectId.value).writeAsString(
       ConversationIndexSerializer.encode(conversationIndexRecord),
     );
   }
