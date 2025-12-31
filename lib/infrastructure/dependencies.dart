@@ -1,0 +1,62 @@
+import 'dart:io';
+
+import 'package:aitelier/core/dependencies.dart';
+import 'package:aitelier/domain/services/conversation_git_hook.dart';
+import 'package:aitelier/infrastructure/conversations/drift_conversation_repository.dart';
+import 'package:aitelier/infrastructure/conversations/models/conversation_dao.dart';
+import 'package:aitelier/infrastructure/git/conversation_git_hook.dart';
+import 'package:aitelier/infrastructure/git/local_git_service.dart';
+import 'package:aitelier/infrastructure/storage/file_conversation_store.dart';
+import 'package:aitelier/infrastructure/storage/local_file_system.dart';
+import 'package:aitelier/infrastructure/storage/local_project_repository.dart';
+import 'package:aitelier/infrastructure/storage/local_workspace_storage.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final localFileSystemProvider = Provider<LocalFileSystem>((ref) {
+  return LocalFileSystem();
+});
+
+// We assume this provider is overridden in bootstrap with getApplicationSupportDirectory()
+final appSupportDirProvider = Provider<Directory>((ref) {
+  throw UnimplementedError('Must override appSupportDirProvider in bootstrap');
+});
+
+final localWorkspaceStorageProvider = Provider<LocalWorkspaceStorage>((ref) {
+  final fs = ref.watch(localFileSystemProvider);
+  final rootDir = ref.watch(appSupportDirProvider);
+  
+  return LocalWorkspaceStorage(
+    fs: fs,
+    basePath: rootDir.path, 
+  );
+});
+
+final projectRepositoryProvider = Provider<LocalProjectRepository>((ref) {
+  return LocalProjectRepository(
+    fs: ref.watch(localFileSystemProvider),
+    workspaceStorage: ref.watch(localWorkspaceStorageProvider),
+  );
+});
+
+final gitServiceProvider = Provider<LocalGitService>((ref) {
+  return LocalGitService();
+});
+
+final conversationDaoProvider = Provider((ref) {
+  return ConversationDao(ref.watch(appDatabaseProvider));
+});
+
+final conversationRepoProvider = Provider<DriftConversationRepository>((ref) {
+  return DriftConversationRepository(ref.watch(conversationDaoProvider));
+});
+
+final fileConversationStoreProvider = Provider<FileConversationStore>((ref) {
+  return FileConversationStore(ref.watch(projectsRootProvider));
+});
+
+final conversationGitHookProvider = Provider<ConversationGitHook>((ref) {
+  return LocalConversationGitHook(
+    root: ref.watch(projectsRootProvider),
+    git: ref.watch(gitServiceProvider),
+  );
+});

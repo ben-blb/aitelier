@@ -27,10 +27,9 @@ class DriftConversationRepository implements ConversationRepository {
   }
 
   @override
-  Stream<List<Conversation>> watchByProject(ProjectId projectId) {
-    return dao.watchByProject(projectId.value).map(
-          (rows) => rows.map(toEntity).toList(),
-        );
+  Future<List<Conversation>> listByProject(ProjectId projectId) async {
+    final rows = await dao.listByProject(projectId.value);
+    return rows.map(toEntity).toList();
   }
 
   @override

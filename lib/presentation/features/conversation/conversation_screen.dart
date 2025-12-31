@@ -1,114 +1,46 @@
-import 'package:aitelier/app_container.dart';
 import 'package:aitelier/domain/value_objects/conversation_id.dart';
 import 'package:aitelier/domain/value_objects/project_id.dart';
-import 'package:aitelier/infrastructure/conversations/models/conversation_message_record.dart';
+import 'package:aitelier/presentation/features/conversation/conversation_controller.dart';
+import 'package:aitelier/presentation/features/conversation/message_bubble.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'message_bubble.dart';
-
-class ConversationScreen extends StatefulWidget {
-  final String conversationId;
+class ConversationScreen extends ConsumerWidget {
+  final ConversationId conversationId;
   final ProjectId projectId;
-  final AppContainer container;
 
   const ConversationScreen({
     super.key,
     required this.conversationId,
-    required this.container,
-    required this.projectId
+    required this.projectId,
   });
 
   @override
-  State<ConversationScreen> createState() => _ConversationScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final conversationKey = (projectId: projectId, conversationId: conversationId);
+    final asyncMessages = ref.watch(conversationScreenProvider(conversationKey));
 
-class _ConversationScreenState extends State<ConversationScreen> {
-  final TextEditingController _controller = TextEditingController();
-  final ScrollController _scrollController = ScrollController();
-
-  List<ConversationMessageRecord> messages = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _loadMessages();
-  }
-
-  Future<void> _loadMessages() async {
-    final newMessages = await widget.container
-        .getConversationMessagesUseCase
-        .execute(
-          projectId: widget.projectId,
-          conversationId: ConversationId(widget.conversationId),
-        );
-
-    if (!mounted) return;
-    setState(() {
-      messages = newMessages;
-    });
-  }
-
-  Future<void> _sendMessage() async {
-    final text = _controller.text.trim();
-    if (text.isEmpty) return;
-
-    _controller.clear();
-
-    final message = ConversationMessageRecord(
-      role: 'user',
-      content: text,
-      timestamp: DateTime.now(),
-    );
-
-    // Optimistic UI update
-    setState(() {
-      messages.add(message);
-    });
-
-    _scrollToBottom();
-
-    // Application layer
-    await widget.container.appendMessageUseCase.execute(
-      conversationId: ConversationId(widget.conversationId),
-      projectId: widget.projectId,
-      message: message,
-    );
-
-    // TODO (next step): trigger AI response pipeline
-  }
-
-  void _scrollToBottom() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeOut,
-      );
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Conversation'),
-      ),
+      appBar: AppBar(title: const Text('Conversation')),
       body: Column(
         children: [
           Expanded(
-            child: ListView.builder(
-              controller: _scrollController,
-              padding: const EdgeInsets.all(12),
-              itemCount: messages.length,
-              itemBuilder: (context, index) {
-                final message = messages[index];
-                return MessageBubble(message: message);
+            child: asyncMessages.when(
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (err, stack) => Center(child: Text('Error: $err')),
+              data: (messages) {
+                return ListView.builder(
+                  padding: const EdgeInsets.all(12),
+                  itemCount: messages.length,
+                  itemBuilder: (context, index) => MessageBubble(message: messages[index]),
+                );
               },
             ),
           ),
           _MessageInput(
-            controller: _controller,
-            onSend: _sendMessage,
+            onSend: (text) {
+              ref.read(conversationScreenProvider(conversationKey).notifier).sendMessage(text);
+            },
           ),
         ],
       ),
@@ -116,14 +48,33 @@ class _ConversationScreenState extends State<ConversationScreen> {
   }
 }
 
-class _MessageInput extends StatelessWidget {
-  final TextEditingController controller;
-  final VoidCallback onSend;
+class _MessageInput extends StatefulWidget {
+  final ValueChanged<String> onSend;
 
   const _MessageInput({
-    required this.controller,
     required this.onSend,
   });
+
+  @override
+  State<_MessageInput> createState() => _MessageInputState();
+}
+
+class _MessageInputState extends State<_MessageInput> {
+  final TextEditingController _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _handleSend() {
+    final text = _controller.text.trim();
+    if (text.isEmpty) return;
+    
+    widget.onSend(text);
+    _controller.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -134,19 +85,20 @@ class _MessageInput extends StatelessWidget {
           children: [
             Expanded(
               child: TextField(
-                controller: controller,
+                controller: _controller,
                 minLines: 1,
                 maxLines: 4,
                 decoration: const InputDecoration(
                   hintText: 'Type a message...',
                   border: OutlineInputBorder(),
                 ),
+                onSubmitted: (_) => _handleSend(),
               ),
             ),
             const SizedBox(width: 8),
             IconButton(
               icon: const Icon(Icons.send),
-              onPressed: onSend,
+              onPressed: _handleSend,
             ),
           ],
         ),

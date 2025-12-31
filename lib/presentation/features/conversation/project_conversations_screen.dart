@@ -1,47 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:uuid/v4.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../app_container.dart';
-import '../../../domain/entities/conversation.dart';
-import '../../../domain/value_objects/conversation_id.dart';
 import '../../../domain/value_objects/conversation_purpose.dart';
 import '../../../domain/value_objects/project_id.dart';
 import 'conversation_screen.dart';
+import 'project_conversations_controller.dart'; 
 
-class ProjectConversationsScreen extends StatefulWidget {
+class ProjectConversationsScreen extends ConsumerWidget {
   final ProjectId projectId;
   final String projectName;
-  final AppContainer container;
-  
 
   const ProjectConversationsScreen({
     super.key,
     required this.projectId,
     required this.projectName,
-    required this.container
   });
 
-  @override
-  State<ProjectConversationsScreen> createState() =>
-      _ProjectConversationsScreenState();
-}
-
-class _ProjectConversationsScreenState
-    extends State<ProjectConversationsScreen> {
-  List<Conversation> conversations = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _loadConversations();
-  }
-
-  Future<void> _loadConversations() async {
-    // TODO: ListConversationsByProjectUseCase
-    setState(() {});
-  }
-
-  Future<void> _createConversation() async {
+  Future<void> _createConversation(BuildContext context, WidgetRef ref) async {
     final result = await showDialog<_NewConversationResult>(
       context: context,
       builder: (_) => const _NewConversationDialog(),
@@ -49,63 +24,66 @@ class _ProjectConversationsScreenState
 
     if (result == null) return;
 
-    final conversationId = ConversationId(UuidV4().generate());
-
-    final conversation = await widget.container.createConversationUseCase.execute(
-      id: conversationId,
-      projectId: widget.projectId,
+    final controller = ref.read(projectConversationsProvider(projectId).notifier);
+    
+    final newConversation = await controller.createConversation(
       title: result.title,
       purpose: result.purpose,
     );
 
-    setState(() {
-      conversations.insert(0, conversation);
-    });
-
-    if (!mounted) return;
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => ConversationScreen(
-          conversationId: conversation.id.value,
-          projectId: widget.projectId,
-          container: widget.container,
+    if (newConversation != null && context.mounted) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => ConversationScreen(
+            conversationId: newConversation.id,
+            projectId: projectId,
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final asyncConversations = ref.watch(projectConversationsProvider(projectId));
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.projectName),
+        title: Text(projectName),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
             tooltip: 'New conversation',
-            onPressed: _createConversation,
+            onPressed: () => _createConversation(context, ref),
           ),
         ],
       ),
-      body: ListView.builder(
-        itemCount: conversations.length,
-        itemBuilder: (context, index) {
-          final convo = conversations[index];
-          return ListTile(
-            title: Text(convo.title),
-            subtitle: Text(convo.purpose.value),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => ConversationScreen(
-                    conversationId: convo.id.value,
-                    projectId: widget.projectId,
-                    container: widget.container,
-                  ),
-                ),
+      body: asyncConversations.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (err, stack) => Center(child: Text('Error: $err')),
+        data: (conversations) {
+          if (conversations.isEmpty) {
+             return const Center(child: Text('No conversations yet.'));
+          }
+          return ListView.builder(
+            itemCount: conversations.length,
+            itemBuilder: (context, index) {
+              final convo = conversations[index];
+              return ListTile(
+                title: Text(convo.title),
+                subtitle: Text(convo.purpose.value),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => ConversationScreen(
+                        conversationId: convo.id,
+                        projectId: projectId,
+                      ),
+                    ),
+                  );
+                },
               );
             },
           );
@@ -129,8 +107,7 @@ class _NewConversationDialog extends StatefulWidget {
   const _NewConversationDialog();
 
   @override
-  State<_NewConversationDialog> createState() =>
-      _NewConversationDialogState();
+  State<_NewConversationDialog> createState() => _NewConversationDialogState();
 }
 
 class _NewConversationDialogState extends State<_NewConversationDialog> {
@@ -138,6 +115,13 @@ class _NewConversationDialogState extends State<_NewConversationDialog> {
   final TextEditingController _purposeController = TextEditingController();
 
   bool get _isValid => _titleController.text.trim().isNotEmpty;
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _purposeController.dispose();
+    super.dispose();
+  }
 
   void _submit() {
     if (!_isValid) return;

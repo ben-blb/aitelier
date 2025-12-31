@@ -7,5 +7,5 @@ abstract class ConversationRepository {
   Future<void> update(Conversation conversation);
   Future<void> touch(ConversationId id);
   Future<Conversation?> getById(ConversationId id);
-  Stream<List<Conversation>> watchByProject(ProjectId projectId);
+  Future<List<Conversation>> listByProject(ProjectId projectId);
 }

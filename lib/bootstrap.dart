@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:aitelier/core/dependencies.dart';
+import 'package:aitelier/infrastructure/dependencies.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 
-import 'app_container.dart';
 import 'core/database/app_database.dart';
 import 'core/utils/logger.dart';
 import 'app.dart';
@@ -42,19 +44,20 @@ Future<void> bootstrapApp() async {
         registry: purposeRegistry,
       );
 
-      final container = AppContainer(
-        database: database,
-        projectsRoot: projectsDir,
-      );
-
       appLogger.i(
         'Bootstrap completed. Loaded ${purposeRegistry.listAll().length} purposes',
       );
 
       runApp(
-        AitelierApp(
-          purposeRegistry: purposeRegistry,
-          container: container,
+        ProviderScope(
+          overrides: [
+            appDatabaseProvider.overrideWithValue(database),
+            appSupportDirProvider.overrideWithValue(rootDir), 
+            projectsRootProvider.overrideWithValue(
+              Directory(p.join(rootDir.path, 'workspaces', 'projects'))
+            ),
+          ],
+          child: AitelierApp(purposeRegistry: purposeRegistry,),
         ),
       );
     },

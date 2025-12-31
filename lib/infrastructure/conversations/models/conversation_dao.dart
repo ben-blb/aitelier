@@ -21,15 +21,16 @@ class ConversationDao extends DatabaseAccessor<AppDatabase>
         .getSingleOrNull();
   }
 
-  Stream<List<Conversation>> watchByProject(String projectId) {
-    return (select(conversations)
-          ..where((c) =>
-              c.projectId.equals(projectId) & c.isArchived.equals(false))
-          ..orderBy([
-            (c) => OrderingTerm.desc(c.updatedAt),
-          ]))
-        .watch();
-  }
+Future<List<Conversation>> listByProject(String projectId) {
+  return (select(conversations)
+        ..where((c) =>
+            c.projectId.equals(projectId) & c.isArchived.equals(false))
+        ..orderBy([
+          (c) => OrderingTerm.desc(c.updatedAt),
+        ]))
+      .get();
+}
+
 
   Future<void> touch(String conversationId) {
     return (update(conversations)
