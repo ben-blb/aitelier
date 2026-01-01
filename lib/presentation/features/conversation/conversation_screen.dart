@@ -61,19 +61,39 @@ class _MessageInput extends StatefulWidget {
 
 class _MessageInputState extends State<_MessageInput> {
   final TextEditingController _controller = TextEditingController();
+  bool _isComposing = false;
+  final FocusNode _focusNode = FocusNode();
 
   @override
   void dispose() {
     _controller.dispose();
+    _focusNode.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(() {
+      final isComposing = _controller.text.trim().isNotEmpty;
+      if (_isComposing != isComposing) {
+        setState(() {
+          _isComposing = isComposing;
+        });
+      }
+    });
   }
 
   void _handleSend() {
     final text = _controller.text.trim();
-    if (text.isEmpty) return;
+    if (text.isEmpty) {
+      _focusNode.requestFocus();
+      return;
+    };
     
     widget.onSend(text);
     _controller.clear();
+    _focusNode.requestFocus();
   }
 
   @override
@@ -86,6 +106,7 @@ class _MessageInputState extends State<_MessageInput> {
             Expanded(
               child: TextField(
                 controller: _controller,
+                focusNode: _focusNode,
                 minLines: 1,
                 maxLines: 4,
                 decoration: const InputDecoration(
@@ -93,12 +114,13 @@ class _MessageInputState extends State<_MessageInput> {
                   border: OutlineInputBorder(),
                 ),
                 onSubmitted: (_) => _handleSend(),
+                textInputAction: TextInputAction.send,
               ),
             ),
             const SizedBox(width: 8),
             IconButton(
               icon: const Icon(Icons.send),
-              onPressed: _handleSend,
+              onPressed: _isComposing ? _handleSend : null,
             ),
           ],
         ),
