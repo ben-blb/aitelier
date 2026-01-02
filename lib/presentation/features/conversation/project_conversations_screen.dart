@@ -1,3 +1,4 @@
+import 'package:aitelier/presentation/features/artifacts/artifact_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -73,6 +74,24 @@ class ProjectConversationsScreen extends ConsumerWidget {
               return ListTile(
                 title: Text(convo.title),
                 subtitle: Text(convo.purpose.value),
+
+                // NEW: Artifact navigation
+                trailing: IconButton(
+                  icon: const Icon(Icons.inventory_2_outlined),
+                  tooltip: 'View artifacts',
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => ArtifactListView(
+                          conversationId: convo.id,
+                          projectId: projectId
+                        ),
+                      ),
+                    );
+                  },
+                ),
+
                 onTap: () {
                   Navigator.push(
                     context,

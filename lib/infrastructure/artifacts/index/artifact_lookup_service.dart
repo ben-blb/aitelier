@@ -1,5 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:aitelier/core/utils/logger.dart';
+import 'package:path/path.dart' as p;
+
+import 'package:aitelier/domain/value_objects/project_id.dart';
 
 import '../models/artifact_summary.dart';
 
@@ -8,38 +12,43 @@ class ArtifactLookupService {
 
   ArtifactLookupService(this.root);
 
-  File get _indexFile => File('${root.path}/artifacts/index.json');
+  File _indexFile(ProjectId projectId) => File(p.join(root.path, projectId.value, 'artifacts','index.json'));
 
-  Future<List<ArtifactSummary>> listAll() async {
-    if (!await _indexFile.exists()) {
+  Future<List<ArtifactSummary>> listAll(ProjectId projectId) async {
+    appLogger.d('Got index file ${_indexFile(projectId)}');
+    if (!await _indexFile(projectId).exists()) {
+      appLogger.w('Index file not found');
       return [];
     }
 
     final json =
-        jsonDecode(await _indexFile.readAsString()) as Map<String, dynamic>;
+        jsonDecode(await _indexFile(projectId).readAsString()) as Map<String, dynamic>;
 
     final artifacts = json['artifacts'] as List<dynamic>;
+
+    appLogger.i('Found ${artifacts.length} artifacts');
 
     return artifacts
         .map((a) => ArtifactSummary.fromJson(a))
         .toList();
   }
 
-  Future<List<ArtifactSummary>> findByTag(String tag) async {
-    final all = await listAll();
+  Future<List<ArtifactSummary>> findByTag(ProjectId projectId, String tag) async {
+    final all = await listAll(projectId);
     return all.where((a) => a.tags.contains(tag)).toList();
   }
 
-  Future<List<ArtifactSummary>> findByType(String type) async {
-    final all = await listAll();
+  Future<List<ArtifactSummary>> findByType(ProjectId projectId, String type) async {
+    final all = await listAll(projectId);
     return all.where((a) => a.type == type).toList();
   }
 
   Future<List<ArtifactSummary>> findByConversation(
     String conversationId,
+    ProjectId projectId,
   ) async {
     final file = File(
-      '${root.path}/artifacts/conversations/$conversationId.json',
+      p.join(root.path, projectId.value, 'artifacts', 'conversations','$conversationId.json'),
     );
 
     if (!await file.exists()) {
@@ -51,7 +60,7 @@ class ArtifactLookupService {
 
     final ids = List<String>.from(data['artifactIds'] ?? []);
 
-    final all = await listAll();
+    final all = await listAll(projectId);
     return all.where((a) => ids.contains(a.id)).toList();
   }
 }

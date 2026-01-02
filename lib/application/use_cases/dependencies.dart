@@ -1,3 +1,5 @@
+import 'package:aitelier/application/use_cases/artifacts/list_artifacts.dart';
+import 'package:aitelier/application/use_cases/artifacts/list_artifacts_by_conversation.dart';
 import 'package:aitelier/application/use_cases/conversations/append_message_use_case.dart';
 import 'package:aitelier/application/use_cases/conversations/create_conversation.dart';
 import 'package:aitelier/application/use_cases/conversations/get_conversation_messages_use_case.dart';
@@ -48,5 +50,18 @@ final getConversationMessagesUseCaseProvider = Provider((ref) {
 final listConversationsUseCaseProvider = Provider<ListConversationsByProjectUseCase>((ref) {
   return ListConversationsByProjectUseCase(
     ref.watch(conversationRepoProvider),
+  );
+});
+
+final listArtifactsUseCaseProvider = Provider<ListArtifacts>((ref) {
+  return ListArtifacts(
+    lookup: ref.watch(artifactLookupServiceProvider),
+  );
+});
+
+final listArtifactsByConversationUseCaseProvider =
+    Provider<ListArtifactsByConversation>((ref) {
+  return ListArtifactsByConversation(
+    lookup: ref.watch(artifactLookupServiceProvider),
   );
 });

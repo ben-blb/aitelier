@@ -46,6 +46,7 @@ class GenericArtifactProcessor {
 
     await storage.saveArtifact(
       metadata: metadata,
+      projectId: input.projectId,
       content: input.rawOutput,
       artifactId: artifactId,
       version: '1.0.0',

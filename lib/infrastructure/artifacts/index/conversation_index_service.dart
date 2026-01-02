@@ -1,19 +1,22 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:aitelier/domain/value_objects/conversation_id.dart';
+import 'package:aitelier/domain/value_objects/project_id.dart';
+import 'package:path/path.dart' as p;
 
 class ConversationIndexService {
   final Directory root;
 
   ConversationIndexService(this.root);
 
-  File _file(String conversationId) => File(
-        '${root.path}/artifacts/conversations/$conversationId.json',
+  File _file(ProjectId projectId, ConversationId conversationId) => File(
+    p.join(root.path, projectId.value, 'artifacts', 'conversations', '${conversationId.value}.json'),
       );
 
-  Future<void> link(String conversationId, String artifactId) async {
-    final file = _file(conversationId);
+  Future<void> link(ProjectId projectId, ConversationId conversationId, String artifactId) async {
+    final file = _file(projectId, conversationId);
 
-    final data = await _load(conversationId);
+    final data = await _load(projectId, conversationId);
     final artifacts = data['artifactIds'] as List<dynamic>;
 
     if (!artifacts.contains(artifactId)) {
@@ -26,8 +29,8 @@ class ConversationIndexService {
     );
   }
 
-  Future<Map<String, dynamic>> _load(String conversationId) async {
-    final file = _file(conversationId);
+  Future<Map<String, dynamic>> _load(ProjectId projectId, ConversationId conversationId) async {
+    final file = _file(projectId, conversationId);
 
     if (!await file.exists()) {
       return {
