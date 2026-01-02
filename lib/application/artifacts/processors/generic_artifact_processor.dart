@@ -1,5 +1,7 @@
 import 'package:aitelier/infrastructure/artifacts/models/artifact_processing_input.dart';
 import 'package:aitelier/infrastructure/artifacts/models/artifact_processing_result.dart';
+import 'package:aitelier/infrastructure/artifacts/provenance/artifact_provenance_service.dart';
+import 'package:aitelier/infrastructure/artifacts/provenance/purpose_index_service.dart';
 import 'package:ulid/ulid.dart';
 
 import '../../../infrastructure/artifacts/storage/artifact_storage_service.dart';
@@ -7,9 +9,13 @@ import '../../../infrastructure/artifacts/storage/artifact_storage_service.dart'
 class GenericArtifactProcessor {
   final ArtifactStorageService storage;
   final Ulid ulid;
+  final ArtifactProvenanceService provenance;
+  final PurposeIndexService purposeIndex;
 
   GenericArtifactProcessor({
     required this.storage,
+    required this.provenance,
+    required this.purposeIndex,
     Ulid? ulid,
   }) : ulid = ulid ?? Ulid();
 

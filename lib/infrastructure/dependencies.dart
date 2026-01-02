@@ -6,6 +6,9 @@ import 'package:aitelier/domain/services/conversation_git_hook.dart';
 import 'package:aitelier/infrastructure/artifacts/index/artifact_index_service.dart';
 import 'package:aitelier/infrastructure/artifacts/index/artifact_lookup_service.dart';
 import 'package:aitelier/infrastructure/artifacts/index/conversation_index_service.dart';
+import 'package:aitelier/infrastructure/artifacts/provenance/artifact_provenance_service.dart';
+import 'package:aitelier/infrastructure/artifacts/provenance/lineage_index_service.dart';
+import 'package:aitelier/infrastructure/artifacts/provenance/purpose_index_service.dart';
 import 'package:aitelier/infrastructure/artifacts/storage/artifact_file_reader.dart';
 import 'package:aitelier/infrastructure/artifacts/storage/artifact_file_writer.dart';
 import 'package:aitelier/infrastructure/artifacts/storage/artifact_storage_service.dart';
@@ -106,10 +109,33 @@ final artifactStorageServiceProvider =
   );
 });
 
+final artifactProvenanceServiceProvider =
+    Provider<ArtifactProvenanceService>((ref) {
+  return ArtifactProvenanceService(
+    ref.watch(projectsRootProvider),
+  );
+});
+
+final purposeIndexServiceProvider =
+    Provider<PurposeIndexService>((ref) {
+  return PurposeIndexService(
+    ref.watch(projectsRootProvider),
+  );
+});
+
+final lineageIndexServiceProvider =
+    Provider<LineageIndexService>((ref) {
+  return LineageIndexService(
+    ref.watch(projectsRootProvider),
+  );
+});
+
 final genericArtifactProcessorProvider =
     Provider<GenericArtifactProcessor>((ref) {
   return GenericArtifactProcessor(
     storage: ref.watch(artifactStorageServiceProvider),
+    provenance: ref.watch(artifactProvenanceServiceProvider),
+    purposeIndex: ref.watch(purposeIndexServiceProvider)
   );
 });
 
