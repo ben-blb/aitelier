@@ -4,6 +4,7 @@ import 'package:aitelier/application/artifacts/processors/generic_artifact_proce
 import 'package:aitelier/core/dependencies.dart';
 import 'package:aitelier/domain/services/conversation_git_hook.dart';
 import 'package:aitelier/infrastructure/artifacts/index/artifact_index_service.dart';
+import 'package:aitelier/infrastructure/artifacts/index/artifact_lookup_service.dart';
 import 'package:aitelier/infrastructure/artifacts/index/conversation_index_service.dart';
 import 'package:aitelier/infrastructure/artifacts/storage/artifact_file_reader.dart';
 import 'package:aitelier/infrastructure/artifacts/storage/artifact_file_writer.dart';
@@ -109,5 +110,12 @@ final genericArtifactProcessorProvider =
     Provider<GenericArtifactProcessor>((ref) {
   return GenericArtifactProcessor(
     storage: ref.watch(artifactStorageServiceProvider),
+  );
+});
+
+final artifactLookupServiceProvider =
+    Provider<ArtifactLookupService>((ref) {
+  return ArtifactLookupService(
+    ref.watch(projectsRootProvider),
   );
 });
