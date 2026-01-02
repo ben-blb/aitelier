@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:aitelier/application/artifacts/processors/generic_artifact_processor.dart';
 import 'package:aitelier/core/dependencies.dart';
 import 'package:aitelier/domain/services/conversation_git_hook.dart';
+import 'package:aitelier/domain/services/secret_storage.dart';
 import 'package:aitelier/infrastructure/artifacts/index/artifact_index_service.dart';
 import 'package:aitelier/infrastructure/artifacts/index/artifact_lookup_service.dart';
 import 'package:aitelier/infrastructure/artifacts/index/conversation_index_service.dart';
@@ -16,6 +17,7 @@ import 'package:aitelier/infrastructure/conversations/drift_conversation_reposit
 import 'package:aitelier/infrastructure/conversations/models/conversation_dao.dart';
 import 'package:aitelier/infrastructure/git/conversation_git_hook.dart';
 import 'package:aitelier/infrastructure/git/local_git_service.dart';
+import 'package:aitelier/infrastructure/security/secure_storage_adapter.dart';
 import 'package:aitelier/infrastructure/storage/file_conversation_store.dart';
 import 'package:aitelier/infrastructure/storage/local_file_system.dart';
 import 'package:aitelier/infrastructure/storage/local_project_repository.dart';
@@ -144,4 +146,8 @@ final artifactLookupServiceProvider =
   return ArtifactLookupService(
     ref.watch(projectsRootProvider),
   );
+});
+
+final secretStorageProvider = Provider<SecretStorage>((ref) {
+  return SecureStorageAdapter();
 });

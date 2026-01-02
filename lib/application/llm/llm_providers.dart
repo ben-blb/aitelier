@@ -1,0 +1,4 @@
+
+enum RegisteredLLMProvider {
+  openai,
+}
