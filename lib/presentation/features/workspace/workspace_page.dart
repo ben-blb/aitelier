@@ -1,6 +1,7 @@
 // features/projects/ui/workspace_page.dart
 
 import 'package:aitelier/presentation/features/conversation/projects_list_controller.dart';
+import 'package:aitelier/presentation/features/workspace/api_key_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../domain/value_objects/project_id.dart';
@@ -14,6 +15,20 @@ class WorkspacePage extends ConsumerWidget {
     final asyncProjects = ref.watch(projectListProvider);
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Workspace'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.key),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (_) => const ApiKeyDialog(),
+              );
+            },
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => ref.read(projectListProvider.notifier).createProject(),
         child: const Icon(Icons.add),
