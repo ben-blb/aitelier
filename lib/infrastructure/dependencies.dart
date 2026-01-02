@@ -2,6 +2,11 @@ import 'dart:io';
 
 import 'package:aitelier/core/dependencies.dart';
 import 'package:aitelier/domain/services/conversation_git_hook.dart';
+import 'package:aitelier/infrastructure/artifacts/index/artifact_index_service.dart';
+import 'package:aitelier/infrastructure/artifacts/index/conversation_index_service.dart';
+import 'package:aitelier/infrastructure/artifacts/storage/artifact_file_reader.dart';
+import 'package:aitelier/infrastructure/artifacts/storage/artifact_file_writer.dart';
+import 'package:aitelier/infrastructure/artifacts/storage/artifact_storage_service.dart';
 import 'package:aitelier/infrastructure/conversations/drift_conversation_repository.dart';
 import 'package:aitelier/infrastructure/conversations/models/conversation_dao.dart';
 import 'package:aitelier/infrastructure/git/conversation_git_hook.dart';
@@ -58,5 +63,43 @@ final conversationGitHookProvider = Provider<ConversationGitHook>((ref) {
   return LocalConversationGitHook(
     root: ref.watch(projectsRootProvider),
     git: ref.watch(gitServiceProvider),
+  );
+});
+
+final artifactFileWriterProvider =
+    Provider<ArtifactFileWriter>((ref) {
+  return ArtifactFileWriter(
+    ref.watch(projectsRootProvider),
+  );
+});
+
+final artifactFileReaderProvider =
+    Provider<ArtifactFileReader>((ref) {
+  return ArtifactFileReader(
+    ref.watch(projectsRootProvider),
+  );
+});
+
+final artifactIndexServiceProvider =
+    Provider<ArtifactIndexService>((ref) {
+  return ArtifactIndexService(
+    ref.watch(projectsRootProvider),
+  );
+});
+
+final conversationIndexServiceProvider =
+    Provider<ConversationIndexService>((ref) {
+  return ConversationIndexService(
+    ref.watch(projectsRootProvider),
+  );
+});
+
+final artifactStorageServiceProvider =
+    Provider<ArtifactStorageService>((ref) {
+  return ArtifactStorageService(
+    writer: ref.watch(artifactFileWriterProvider),
+    reader: ref.watch(artifactFileReaderProvider),
+    artifactIndex: ref.watch(artifactIndexServiceProvider),
+    conversationIndex: ref.watch(conversationIndexServiceProvider),
   );
 });
