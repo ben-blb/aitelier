@@ -29,12 +29,8 @@ final openAIClientProvider = FutureProvider<OpenAIClient>((ref) async {
   );
 });
 
-final llmRepositoryProvider = Provider<LLMRepository>((ref) {
-  final client = ref.watch(openAIClientProvider).value;
-
-  if (client == null) {
-    throw Exception('LLM client not ready');
-  }
+final llmRepositoryProvider = FutureProvider<LLMRepository>((ref) async {
+  final client = await ref.watch(openAIClientProvider.future);
 
   return LLMRepositoryImpl(
     OpenAILLMProvider(client),
