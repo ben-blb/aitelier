@@ -1176,6 +1176,236 @@ class PipelinesTableCompanion extends UpdateCompanion<PipelinesTableData> {
   }
 }
 
+class $PipelinePurposeTableTable extends PipelinePurposeTable
+    with TableInfo<$PipelinePurposeTableTable, PipelinePurposeTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $PipelinePurposeTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _purposeMeta = const VerificationMeta(
+    'purpose',
+  );
+  @override
+  late final GeneratedColumn<String> purpose = GeneratedColumn<String>(
+    'purpose',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _pipelineIdMeta = const VerificationMeta(
+    'pipelineId',
+  );
+  @override
+  late final GeneratedColumn<String> pipelineId = GeneratedColumn<String>(
+    'pipeline_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [purpose, pipelineId];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'pipeline_purpose_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<PipelinePurposeTableData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('purpose')) {
+      context.handle(
+        _purposeMeta,
+        purpose.isAcceptableOrUnknown(data['purpose']!, _purposeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_purposeMeta);
+    }
+    if (data.containsKey('pipeline_id')) {
+      context.handle(
+        _pipelineIdMeta,
+        pipelineId.isAcceptableOrUnknown(data['pipeline_id']!, _pipelineIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_pipelineIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {purpose};
+  @override
+  PipelinePurposeTableData map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return PipelinePurposeTableData(
+      purpose: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}purpose'],
+      )!,
+      pipelineId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}pipeline_id'],
+      )!,
+    );
+  }
+
+  @override
+  $PipelinePurposeTableTable createAlias(String alias) {
+    return $PipelinePurposeTableTable(attachedDatabase, alias);
+  }
+}
+
+class PipelinePurposeTableData extends DataClass
+    implements Insertable<PipelinePurposeTableData> {
+  final String purpose;
+  final String pipelineId;
+  const PipelinePurposeTableData({
+    required this.purpose,
+    required this.pipelineId,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['purpose'] = Variable<String>(purpose);
+    map['pipeline_id'] = Variable<String>(pipelineId);
+    return map;
+  }
+
+  PipelinePurposeTableCompanion toCompanion(bool nullToAbsent) {
+    return PipelinePurposeTableCompanion(
+      purpose: Value(purpose),
+      pipelineId: Value(pipelineId),
+    );
+  }
+
+  factory PipelinePurposeTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return PipelinePurposeTableData(
+      purpose: serializer.fromJson<String>(json['purpose']),
+      pipelineId: serializer.fromJson<String>(json['pipelineId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'purpose': serializer.toJson<String>(purpose),
+      'pipelineId': serializer.toJson<String>(pipelineId),
+    };
+  }
+
+  PipelinePurposeTableData copyWith({String? purpose, String? pipelineId}) =>
+      PipelinePurposeTableData(
+        purpose: purpose ?? this.purpose,
+        pipelineId: pipelineId ?? this.pipelineId,
+      );
+  PipelinePurposeTableData copyWithCompanion(
+    PipelinePurposeTableCompanion data,
+  ) {
+    return PipelinePurposeTableData(
+      purpose: data.purpose.present ? data.purpose.value : this.purpose,
+      pipelineId: data.pipelineId.present
+          ? data.pipelineId.value
+          : this.pipelineId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PipelinePurposeTableData(')
+          ..write('purpose: $purpose, ')
+          ..write('pipelineId: $pipelineId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(purpose, pipelineId);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is PipelinePurposeTableData &&
+          other.purpose == this.purpose &&
+          other.pipelineId == this.pipelineId);
+}
+
+class PipelinePurposeTableCompanion
+    extends UpdateCompanion<PipelinePurposeTableData> {
+  final Value<String> purpose;
+  final Value<String> pipelineId;
+  final Value<int> rowid;
+  const PipelinePurposeTableCompanion({
+    this.purpose = const Value.absent(),
+    this.pipelineId = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  PipelinePurposeTableCompanion.insert({
+    required String purpose,
+    required String pipelineId,
+    this.rowid = const Value.absent(),
+  }) : purpose = Value(purpose),
+       pipelineId = Value(pipelineId);
+  static Insertable<PipelinePurposeTableData> custom({
+    Expression<String>? purpose,
+    Expression<String>? pipelineId,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (purpose != null) 'purpose': purpose,
+      if (pipelineId != null) 'pipeline_id': pipelineId,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  PipelinePurposeTableCompanion copyWith({
+    Value<String>? purpose,
+    Value<String>? pipelineId,
+    Value<int>? rowid,
+  }) {
+    return PipelinePurposeTableCompanion(
+      purpose: purpose ?? this.purpose,
+      pipelineId: pipelineId ?? this.pipelineId,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (purpose.present) {
+      map['purpose'] = Variable<String>(purpose.value);
+    }
+    if (pipelineId.present) {
+      map['pipeline_id'] = Variable<String>(pipelineId.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PipelinePurposeTableCompanion(')
+          ..write('purpose: $purpose, ')
+          ..write('pipelineId: $pipelineId, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -1184,6 +1414,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     this,
   );
   late final $PipelinesTableTable pipelinesTable = $PipelinesTableTable(this);
+  late final $PipelinePurposeTableTable pipelinePurposeTable =
+      $PipelinePurposeTableTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -1192,6 +1424,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     conversations,
     llmSettingsTable,
     pipelinesTable,
+    pipelinePurposeTable,
   ];
 }
 
@@ -1845,6 +2078,167 @@ typedef $$PipelinesTableTableProcessedTableManager =
       PipelinesTableData,
       PrefetchHooks Function()
     >;
+typedef $$PipelinePurposeTableTableCreateCompanionBuilder =
+    PipelinePurposeTableCompanion Function({
+      required String purpose,
+      required String pipelineId,
+      Value<int> rowid,
+    });
+typedef $$PipelinePurposeTableTableUpdateCompanionBuilder =
+    PipelinePurposeTableCompanion Function({
+      Value<String> purpose,
+      Value<String> pipelineId,
+      Value<int> rowid,
+    });
+
+class $$PipelinePurposeTableTableFilterComposer
+    extends Composer<_$AppDatabase, $PipelinePurposeTableTable> {
+  $$PipelinePurposeTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get purpose => $composableBuilder(
+    column: $table.purpose,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get pipelineId => $composableBuilder(
+    column: $table.pipelineId,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$PipelinePurposeTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $PipelinePurposeTableTable> {
+  $$PipelinePurposeTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get purpose => $composableBuilder(
+    column: $table.purpose,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get pipelineId => $composableBuilder(
+    column: $table.pipelineId,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$PipelinePurposeTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $PipelinePurposeTableTable> {
+  $$PipelinePurposeTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get purpose =>
+      $composableBuilder(column: $table.purpose, builder: (column) => column);
+
+  GeneratedColumn<String> get pipelineId => $composableBuilder(
+    column: $table.pipelineId,
+    builder: (column) => column,
+  );
+}
+
+class $$PipelinePurposeTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $PipelinePurposeTableTable,
+          PipelinePurposeTableData,
+          $$PipelinePurposeTableTableFilterComposer,
+          $$PipelinePurposeTableTableOrderingComposer,
+          $$PipelinePurposeTableTableAnnotationComposer,
+          $$PipelinePurposeTableTableCreateCompanionBuilder,
+          $$PipelinePurposeTableTableUpdateCompanionBuilder,
+          (
+            PipelinePurposeTableData,
+            BaseReferences<
+              _$AppDatabase,
+              $PipelinePurposeTableTable,
+              PipelinePurposeTableData
+            >,
+          ),
+          PipelinePurposeTableData,
+          PrefetchHooks Function()
+        > {
+  $$PipelinePurposeTableTableTableManager(
+    _$AppDatabase db,
+    $PipelinePurposeTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$PipelinePurposeTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$PipelinePurposeTableTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$PipelinePurposeTableTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> purpose = const Value.absent(),
+                Value<String> pipelineId = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => PipelinePurposeTableCompanion(
+                purpose: purpose,
+                pipelineId: pipelineId,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String purpose,
+                required String pipelineId,
+                Value<int> rowid = const Value.absent(),
+              }) => PipelinePurposeTableCompanion.insert(
+                purpose: purpose,
+                pipelineId: pipelineId,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$PipelinePurposeTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $PipelinePurposeTableTable,
+      PipelinePurposeTableData,
+      $$PipelinePurposeTableTableFilterComposer,
+      $$PipelinePurposeTableTableOrderingComposer,
+      $$PipelinePurposeTableTableAnnotationComposer,
+      $$PipelinePurposeTableTableCreateCompanionBuilder,
+      $$PipelinePurposeTableTableUpdateCompanionBuilder,
+      (
+        PipelinePurposeTableData,
+        BaseReferences<
+          _$AppDatabase,
+          $PipelinePurposeTableTable,
+          PipelinePurposeTableData
+        >,
+      ),
+      PipelinePurposeTableData,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -1855,4 +2249,6 @@ class $AppDatabaseManager {
       $$LlmSettingsTableTableTableManager(_db, _db.llmSettingsTable);
   $$PipelinesTableTableTableManager get pipelinesTable =>
       $$PipelinesTableTableTableManager(_db, _db.pipelinesTable);
+  $$PipelinePurposeTableTableTableManager get pipelinePurposeTable =>
+      $$PipelinePurposeTableTableTableManager(_db, _db.pipelinePurposeTable);
 }

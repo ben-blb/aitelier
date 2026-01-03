@@ -10,4 +10,15 @@ class Pipeline {
     required this.stepIds,
     required this.enabled,
   });
+
+  Pipeline copyWith({
+    required bool enabled
+  }) {
+    return Pipeline(
+      id: id,
+      name: name, 
+      stepIds: stepIds,
+      enabled: enabled
+    );
+  }
 }

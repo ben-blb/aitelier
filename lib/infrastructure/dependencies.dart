@@ -18,6 +18,8 @@ import 'package:aitelier/infrastructure/conversations/drift_conversation_reposit
 import 'package:aitelier/infrastructure/conversations/models/conversation_dao.dart';
 import 'package:aitelier/infrastructure/git/conversation_git_hook.dart';
 import 'package:aitelier/infrastructure/git/local_git_service.dart';
+import 'package:aitelier/infrastructure/pipeline/models/pipeline_dao.dart';
+import 'package:aitelier/infrastructure/pipeline/pipeline_repository_impl.dart';
 import 'package:aitelier/infrastructure/security/secure_storage_adapter.dart';
 import 'package:aitelier/infrastructure/storage/file_conversation_store.dart';
 import 'package:aitelier/infrastructure/storage/local_file_system.dart';
@@ -157,4 +159,12 @@ final artifactRepositoryProvider = Provider<FileArtifactRepository>((ref) {
   return FileArtifactRepository(
     ref.watch(projectsRootProvider),
   );
+});
+
+final pipelineDaoProvider = Provider<PipelineDao>((ref) {
+  return PipelineDao(ref.watch(appDatabaseProvider));
+});
+
+final pipelineRepositoryProvider = Provider<PipelineRepositoryImpl>((ref){
+  return PipelineRepositoryImpl(ref.watch(pipelineDaoProvider));
 });
