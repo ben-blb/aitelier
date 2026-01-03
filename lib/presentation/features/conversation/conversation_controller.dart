@@ -1,6 +1,10 @@
 import 'package:aitelier/application/dependencies.dart';
 import 'package:aitelier/application/use_cases/dependencies.dart';
+import 'package:aitelier/core/pipeline/pipeline_executor.dart';
+import 'package:aitelier/core/pipeline/pipeline_providers.dart';
 import 'package:aitelier/domain/entities/llm/llm_message.dart';
+import 'package:aitelier/domain/entities/pipeline/pipeline.dart';
+import 'package:aitelier/domain/entities/pipeline/pipeline_context.dart';
 import 'package:aitelier/domain/value_objects/conversation_id.dart';
 import 'package:aitelier/domain/value_objects/llm_provider_id.dart';
 import 'package:aitelier/domain/value_objects/project_id.dart';
@@ -45,13 +49,41 @@ class ConversationController
     final current = state.value;
     if (current == null) return;
 
+    final registry = ref.read(pipelineRegistryProvider);
+
+    final pipelineExecutor = PipelineExecutor(registry);
+
+    final context = PipelineContext(input: text);
+    
+    final pipelineResult = await pipelineExecutor.execute(
+      Pipeline(
+        id: 'test-123',
+        name: 'preprocessing',
+        stepIds: ['pre.context_retrieval', 'pre.intent_classification', 'pre.entity_extraction'],
+        enabled: true
+      ),
+      context,
+    );
+
+    final pipelineMessage = ConversationMessageRecord(
+      role: 'pipeline',
+      content: pipelineResult.metadata.toString(),
+      timestamp: DateTime.now(),
+    );
+
     final userMessage = ConversationMessageRecord(
       role: 'user',
       content: text,
       timestamp: DateTime.now(),
     );
 
-    state = AsyncData([...current, userMessage]);
+    state = AsyncData([...current, pipelineMessage, userMessage]);
+
+    await _appendMessage.execute(
+      projectId: arg.projectId,
+      conversationId: arg.conversationId,
+      message: pipelineMessage,
+    );
 
     await _appendMessage.execute(
       projectId: arg.projectId,
@@ -70,7 +102,7 @@ class ConversationController
     state = AsyncData([...state.value!, assistantMessage]);
 
     await for (final chunk in executor.streamResponse(
-      conversation: [...current, userMessage].map(_toLLM).toList(),
+      conversation: [...current, pipelineMessage, userMessage].map(_toLLM).toList(),
       purpose: 'general',
       model: const LLMModelId('gpt-4o-mini'),
     )) {
