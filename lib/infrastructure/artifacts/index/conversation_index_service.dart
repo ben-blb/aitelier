@@ -29,17 +29,31 @@ class ConversationIndexService {
     );
   }
 
-  Future<Map<String, dynamic>> _load(ProjectId projectId, ConversationId conversationId) async {
+  Future<Map<String, dynamic>> _load(
+    ProjectId projectId,
+    ConversationId conversationId,
+  ) async {
     final file = _file(projectId, conversationId);
 
+    final fallback = {
+      'conversationId': conversationId.value,
+      'artifactIds': <String>[],
+    };
+
     if (!await file.exists()) {
-      return {
-        'conversationId': conversationId,
-        'artifactIds': [],
-      };
+      return fallback;
     }
 
-    return jsonDecode(await file.readAsString())
-        as Map<String, dynamic>;
+    try {
+      final content = await file.readAsString();
+      final decoded = jsonDecode(content);
+      if (decoded is Map<String, dynamic>) {
+        return decoded;
+      }
+      return fallback;
+    } catch (_) {
+      return fallback;
+    }
   }
+
 }

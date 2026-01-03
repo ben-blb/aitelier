@@ -33,7 +33,7 @@ class GenericArtifactProcessor {
       'tags': ['generic', 'auto-captured'],
       'isGeneric': true,
       'origin': {
-        'conversationId': input.conversationId,
+        'conversationId': input.conversationId.value,
         'purpose': input.purpose,
         'parentArtifactId': null,
       },

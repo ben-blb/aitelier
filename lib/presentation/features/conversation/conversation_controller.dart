@@ -4,7 +4,9 @@ import 'package:aitelier/domain/entities/llm/llm_message.dart';
 import 'package:aitelier/domain/value_objects/conversation_id.dart';
 import 'package:aitelier/domain/value_objects/llm_provider_id.dart';
 import 'package:aitelier/domain/value_objects/project_id.dart';
+import 'package:aitelier/infrastructure/artifacts/models/artifact_processing_input.dart';
 import 'package:aitelier/infrastructure/conversations/models/conversation_message_record.dart';
+import 'package:aitelier/infrastructure/dependencies.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
@@ -83,6 +85,19 @@ class ConversationController
         updatedAssistant,
       ]);
     }
+
+    final processor = ref.read(genericArtifactProcessorProvider);
+
+    await processor.process(
+      ArtifactProcessingInput(
+        projectId: arg.projectId,
+        conversationId: arg.conversationId,
+        purpose: 'general',
+        rawOutput: assistantBuffer.toString(),
+        contentTypeHint: 'text',
+        preferredTitle: 'LLM Output',
+      ),
+    );
 
     await _appendMessage.execute(
       projectId: arg.projectId,

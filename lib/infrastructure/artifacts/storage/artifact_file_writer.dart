@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:aitelier/core/utils/logger.dart';
 import 'package:path/path.dart' as p;
 
 import 'package:aitelier/domain/value_objects/project_id.dart';
@@ -19,8 +20,8 @@ class ArtifactFileWriter {
   ) async {
     final dir = _artifactDir(projectId, artifactId);
     await dir.create(recursive: true);
-
-    final file = File('${dir.path}/metadata.json');
+    appLogger.d('writing ${dir.path}/metadata.json');
+    final file = File(p.join(dir.path, 'metadata.json'));
     await file.writeAsString(
       const JsonEncoder.withIndent('  ').convert(metadata),
     );
@@ -38,7 +39,8 @@ class ArtifactFileWriter {
     );
 
     await dir.create(recursive: true);
-
+    
+    appLogger.d('writing ${dir.path}/artifact.$extension');
     final file = File(p.join(dir.path, 'artifact.$extension'));
     await file.writeAsString(content);
   }

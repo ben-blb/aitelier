@@ -1,3 +1,4 @@
+import 'package:aitelier/core/utils/logger.dart';
 import 'package:aitelier/domain/value_objects/conversation_id.dart';
 import 'package:aitelier/domain/value_objects/project_id.dart';
 
@@ -28,6 +29,7 @@ class ArtifactStorageService {
     required ConversationId conversationId,
     required String fileExtension,
   }) async {
+    appLogger.i('Creating artifact ${conversationId.value} ${projectId.value}');
     await writer.writeMetadata(projectId, artifactId, metadata);
     await writer.writeContent(
       projectId: projectId,

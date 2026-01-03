@@ -10,6 +10,7 @@ import 'package:aitelier/infrastructure/artifacts/index/conversation_index_servi
 import 'package:aitelier/infrastructure/artifacts/provenance/artifact_provenance_service.dart';
 import 'package:aitelier/infrastructure/artifacts/provenance/lineage_index_service.dart';
 import 'package:aitelier/infrastructure/artifacts/provenance/purpose_index_service.dart';
+import 'package:aitelier/infrastructure/artifacts/repositories/file_artifact_repository.dart';
 import 'package:aitelier/infrastructure/artifacts/storage/artifact_file_reader.dart';
 import 'package:aitelier/infrastructure/artifacts/storage/artifact_file_writer.dart';
 import 'package:aitelier/infrastructure/artifacts/storage/artifact_storage_service.dart';
@@ -150,4 +151,10 @@ final artifactLookupServiceProvider =
 
 final secretStorageProvider = Provider<SecretStorage>((ref) {
   return SecureStorageAdapter();
+});
+
+final artifactRepositoryProvider = Provider<FileArtifactRepository>((ref) {
+  return FileArtifactRepository(
+    ref.watch(projectsRootProvider),
+  );
 });
