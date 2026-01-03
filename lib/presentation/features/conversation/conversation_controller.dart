@@ -59,7 +59,13 @@ class ConversationController
       Pipeline(
         id: 'test-123',
         name: 'preprocessing',
-        stepIds: ['pre.context_retrieval', 'pre.intent_classification', 'pre.entity_extraction'],
+        stepIds: [
+          'pre.context_retrieval',
+          'pre.intent_classification',
+          'pre.entity_extraction',
+          'post.output_normalization',
+          'post.chunking',
+          'post.artifact_enrichment'],
         enabled: true
       ),
       context,
