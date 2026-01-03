@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:aitelier/core/database/tables/llm_settings_table.dart';
+import 'package:aitelier/core/database/tables/pipeline_tables.dart';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:path/path.dart' as p;
@@ -8,7 +9,7 @@ import 'package:path_provider/path_provider.dart';
 import 'tables/conversations_table.dart';
 
 part 'app_database.g.dart';
-@DriftDatabase(tables: [Conversations, LlmSettingsTable])
+@DriftDatabase(tables: [Conversations, LlmSettingsTable, PipelinesTable])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 

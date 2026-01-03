@@ -866,6 +866,316 @@ class LlmSettingsTableCompanion extends UpdateCompanion<LlmSettingsTableData> {
   }
 }
 
+class $PipelinesTableTable extends PipelinesTable
+    with TableInfo<$PipelinesTableTable, PipelinesTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $PipelinesTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _stepIdsMeta = const VerificationMeta(
+    'stepIds',
+  );
+  @override
+  late final GeneratedColumn<String> stepIds = GeneratedColumn<String>(
+    'step_ids',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _enabledMeta = const VerificationMeta(
+    'enabled',
+  );
+  @override
+  late final GeneratedColumn<bool> enabled = GeneratedColumn<bool>(
+    'enabled',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("enabled" IN (0, 1))',
+    ),
+    defaultValue: const Constant(true),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, name, stepIds, enabled];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'pipelines_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<PipelinesTableData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('step_ids')) {
+      context.handle(
+        _stepIdsMeta,
+        stepIds.isAcceptableOrUnknown(data['step_ids']!, _stepIdsMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_stepIdsMeta);
+    }
+    if (data.containsKey('enabled')) {
+      context.handle(
+        _enabledMeta,
+        enabled.isAcceptableOrUnknown(data['enabled']!, _enabledMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  PipelinesTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return PipelinesTableData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      stepIds: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}step_ids'],
+      )!,
+      enabled: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}enabled'],
+      )!,
+    );
+  }
+
+  @override
+  $PipelinesTableTable createAlias(String alias) {
+    return $PipelinesTableTable(attachedDatabase, alias);
+  }
+}
+
+class PipelinesTableData extends DataClass
+    implements Insertable<PipelinesTableData> {
+  final String id;
+  final String name;
+  final String stepIds;
+  final bool enabled;
+  const PipelinesTableData({
+    required this.id,
+    required this.name,
+    required this.stepIds,
+    required this.enabled,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['name'] = Variable<String>(name);
+    map['step_ids'] = Variable<String>(stepIds);
+    map['enabled'] = Variable<bool>(enabled);
+    return map;
+  }
+
+  PipelinesTableCompanion toCompanion(bool nullToAbsent) {
+    return PipelinesTableCompanion(
+      id: Value(id),
+      name: Value(name),
+      stepIds: Value(stepIds),
+      enabled: Value(enabled),
+    );
+  }
+
+  factory PipelinesTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return PipelinesTableData(
+      id: serializer.fromJson<String>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
+      stepIds: serializer.fromJson<String>(json['stepIds']),
+      enabled: serializer.fromJson<bool>(json['enabled']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'name': serializer.toJson<String>(name),
+      'stepIds': serializer.toJson<String>(stepIds),
+      'enabled': serializer.toJson<bool>(enabled),
+    };
+  }
+
+  PipelinesTableData copyWith({
+    String? id,
+    String? name,
+    String? stepIds,
+    bool? enabled,
+  }) => PipelinesTableData(
+    id: id ?? this.id,
+    name: name ?? this.name,
+    stepIds: stepIds ?? this.stepIds,
+    enabled: enabled ?? this.enabled,
+  );
+  PipelinesTableData copyWithCompanion(PipelinesTableCompanion data) {
+    return PipelinesTableData(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      stepIds: data.stepIds.present ? data.stepIds.value : this.stepIds,
+      enabled: data.enabled.present ? data.enabled.value : this.enabled,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PipelinesTableData(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('stepIds: $stepIds, ')
+          ..write('enabled: $enabled')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, name, stepIds, enabled);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is PipelinesTableData &&
+          other.id == this.id &&
+          other.name == this.name &&
+          other.stepIds == this.stepIds &&
+          other.enabled == this.enabled);
+}
+
+class PipelinesTableCompanion extends UpdateCompanion<PipelinesTableData> {
+  final Value<String> id;
+  final Value<String> name;
+  final Value<String> stepIds;
+  final Value<bool> enabled;
+  final Value<int> rowid;
+  const PipelinesTableCompanion({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+    this.stepIds = const Value.absent(),
+    this.enabled = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  PipelinesTableCompanion.insert({
+    required String id,
+    required String name,
+    required String stepIds,
+    this.enabled = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       name = Value(name),
+       stepIds = Value(stepIds);
+  static Insertable<PipelinesTableData> custom({
+    Expression<String>? id,
+    Expression<String>? name,
+    Expression<String>? stepIds,
+    Expression<bool>? enabled,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (stepIds != null) 'step_ids': stepIds,
+      if (enabled != null) 'enabled': enabled,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  PipelinesTableCompanion copyWith({
+    Value<String>? id,
+    Value<String>? name,
+    Value<String>? stepIds,
+    Value<bool>? enabled,
+    Value<int>? rowid,
+  }) {
+    return PipelinesTableCompanion(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      stepIds: stepIds ?? this.stepIds,
+      enabled: enabled ?? this.enabled,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (stepIds.present) {
+      map['step_ids'] = Variable<String>(stepIds.value);
+    }
+    if (enabled.present) {
+      map['enabled'] = Variable<bool>(enabled.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PipelinesTableCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('stepIds: $stepIds, ')
+          ..write('enabled: $enabled, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -873,6 +1183,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $LlmSettingsTableTable llmSettingsTable = $LlmSettingsTableTable(
     this,
   );
+  late final $PipelinesTableTable pipelinesTable = $PipelinesTableTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -880,6 +1191,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   List<DatabaseSchemaEntity> get allSchemaEntities => [
     conversations,
     llmSettingsTable,
+    pipelinesTable,
   ];
 }
 
@@ -1346,6 +1658,193 @@ typedef $$LlmSettingsTableTableProcessedTableManager =
       LlmSettingsTableData,
       PrefetchHooks Function()
     >;
+typedef $$PipelinesTableTableCreateCompanionBuilder =
+    PipelinesTableCompanion Function({
+      required String id,
+      required String name,
+      required String stepIds,
+      Value<bool> enabled,
+      Value<int> rowid,
+    });
+typedef $$PipelinesTableTableUpdateCompanionBuilder =
+    PipelinesTableCompanion Function({
+      Value<String> id,
+      Value<String> name,
+      Value<String> stepIds,
+      Value<bool> enabled,
+      Value<int> rowid,
+    });
+
+class $$PipelinesTableTableFilterComposer
+    extends Composer<_$AppDatabase, $PipelinesTableTable> {
+  $$PipelinesTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get stepIds => $composableBuilder(
+    column: $table.stepIds,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get enabled => $composableBuilder(
+    column: $table.enabled,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$PipelinesTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $PipelinesTableTable> {
+  $$PipelinesTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get stepIds => $composableBuilder(
+    column: $table.stepIds,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get enabled => $composableBuilder(
+    column: $table.enabled,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$PipelinesTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $PipelinesTableTable> {
+  $$PipelinesTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get stepIds =>
+      $composableBuilder(column: $table.stepIds, builder: (column) => column);
+
+  GeneratedColumn<bool> get enabled =>
+      $composableBuilder(column: $table.enabled, builder: (column) => column);
+}
+
+class $$PipelinesTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $PipelinesTableTable,
+          PipelinesTableData,
+          $$PipelinesTableTableFilterComposer,
+          $$PipelinesTableTableOrderingComposer,
+          $$PipelinesTableTableAnnotationComposer,
+          $$PipelinesTableTableCreateCompanionBuilder,
+          $$PipelinesTableTableUpdateCompanionBuilder,
+          (
+            PipelinesTableData,
+            BaseReferences<
+              _$AppDatabase,
+              $PipelinesTableTable,
+              PipelinesTableData
+            >,
+          ),
+          PipelinesTableData,
+          PrefetchHooks Function()
+        > {
+  $$PipelinesTableTableTableManager(
+    _$AppDatabase db,
+    $PipelinesTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$PipelinesTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$PipelinesTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$PipelinesTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String> stepIds = const Value.absent(),
+                Value<bool> enabled = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => PipelinesTableCompanion(
+                id: id,
+                name: name,
+                stepIds: stepIds,
+                enabled: enabled,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String name,
+                required String stepIds,
+                Value<bool> enabled = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => PipelinesTableCompanion.insert(
+                id: id,
+                name: name,
+                stepIds: stepIds,
+                enabled: enabled,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$PipelinesTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $PipelinesTableTable,
+      PipelinesTableData,
+      $$PipelinesTableTableFilterComposer,
+      $$PipelinesTableTableOrderingComposer,
+      $$PipelinesTableTableAnnotationComposer,
+      $$PipelinesTableTableCreateCompanionBuilder,
+      $$PipelinesTableTableUpdateCompanionBuilder,
+      (
+        PipelinesTableData,
+        BaseReferences<_$AppDatabase, $PipelinesTableTable, PipelinesTableData>,
+      ),
+      PipelinesTableData,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -1354,4 +1853,6 @@ class $AppDatabaseManager {
       $$ConversationsTableTableManager(_db, _db.conversations);
   $$LlmSettingsTableTableTableManager get llmSettingsTable =>
       $$LlmSettingsTableTableTableManager(_db, _db.llmSettingsTable);
+  $$PipelinesTableTableTableManager get pipelinesTable =>
+      $$PipelinesTableTableTableManager(_db, _db.pipelinesTable);
 }
