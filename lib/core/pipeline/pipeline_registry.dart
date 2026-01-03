@@ -1,4 +1,4 @@
-import 'package:aitelier/core/pipeline/pipeline_executor.dart';
+import 'package:aitelier/core/pipeline/pipeline_step_handler.dart';
 
 class PipelineRegistry {
   final Map<String, PipelineStepHandler> _handlers = {};

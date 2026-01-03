@@ -3,12 +3,6 @@ import 'package:aitelier/domain/entities/pipeline/pipeline.dart';
 import 'package:aitelier/domain/entities/pipeline/pipeline_context.dart';
 import 'package:aitelier/domain/entities/pipeline/pipeline_error.dart';
 
-abstract class PipelineStepHandler {
-  String get stepId;
-
-  Future<PipelineContext> execute(PipelineContext context);
-}
-
 class PipelineExecutor {
   final PipelineRegistry registry;
 
