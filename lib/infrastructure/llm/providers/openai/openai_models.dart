@@ -33,6 +33,14 @@ class OpenAIChatRequest {
       'stream': stream,
     };
   }
+
+  OpenAIChatRequest copyWith({bool? stream}) {
+    return OpenAIChatRequest(
+      model: model,
+      messages: messages,
+      stream: stream ?? this.stream,
+    );
+  }
 }
 
 class OpenAIChoiceMessage {

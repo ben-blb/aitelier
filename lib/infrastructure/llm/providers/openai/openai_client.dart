@@ -31,4 +31,24 @@ class OpenAIClient {
       jsonDecode(response.body),
     );
   }
+
+  Stream<String> streamChat(
+    OpenAIChatRequest request,
+  ) async* {
+    final uri =
+        Uri.parse('https://api.openai.com/v1/chat/completions');
+
+    final stream = http.stream(
+      uri,
+      headers: {
+        'Authorization': 'Bearer $apiKey',
+        'Content-Type': 'application/json',
+      },
+      body: request.toJson(),
+    );
+
+    await for (final chunk in stream) {
+      yield chunk;
+    }
+  }
 }

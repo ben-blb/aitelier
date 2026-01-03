@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_markdown/flutter_markdown.dart';
 import '../../../infrastructure/conversations/models/conversation_message_record.dart';
 
 class MessageBubble extends StatelessWidget {
@@ -23,7 +23,15 @@ class MessageBubble extends StatelessWidget {
               : Theme.of(context).colorScheme.surfaceVariant,
           borderRadius: BorderRadius.circular(12),
         ),
-        child: Text(message.content),
+        child: isUser
+            ? Text(message.content)
+            : MarkdownBody(
+                data: message.content,
+                selectable: true,
+                styleSheet: MarkdownStyleSheet.fromTheme(
+                  Theme.of(context),
+                ),
+              ),
       ),
     );
   }

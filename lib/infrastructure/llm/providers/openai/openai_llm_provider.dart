@@ -2,6 +2,7 @@ import 'package:aitelier/domain/entities/llm/llm_execution_request.dart';
 import 'package:aitelier/domain/entities/llm/llm_execution_result.dart';
 import 'package:aitelier/domain/entities/llm/llm_stream_chunk.dart';
 import 'package:aitelier/infrastructure/llm/llm_provider.dart';
+import 'package:aitelier/infrastructure/llm/providers/openai/openai_stream_parser.dart';
 
 import 'openai_client.dart';
 import 'openai_models.dart';
@@ -36,13 +37,36 @@ class OpenAILLMProvider implements LLMProvider {
   }
 
   @override
-  Stream<LLMStreamChunk> stream( // streamming will be back in avengers doomsday
+  Stream<LLMStreamChunk> stream(
     LLMExecutionRequest request,
   ) async* {
-    final result = await execute(request);
-    yield LLMStreamChunk(
-      content: result.content,
+    final openAIRequest = OpenAIChatRequest(
+      model: request.model.value,
+      stream: true,
+      messages: request.prompt.messages
+          .map(
+            (m) => OpenAIChatMessage(
+              role: m.role.name,
+              content: m.content,
+            ),
+          )
+          .toList(),
+    );
+
+    await for (final rawChunk
+        in client.streamChat(openAIRequest)) {
+      for (final token in parseOpenAIStream(rawChunk)) {
+        yield LLMStreamChunk(
+          content: token,
+          isFinal: false,
+        );
+      }
+    }
+
+    yield const LLMStreamChunk(
+      content: '',
       isFinal: true,
     );
   }
+
 }
