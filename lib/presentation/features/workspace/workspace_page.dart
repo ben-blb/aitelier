@@ -1,6 +1,7 @@
 // features/projects/ui/workspace_page.dart
 
 import 'package:aitelier/presentation/features/conversation/projects_list_controller.dart';
+import 'package:aitelier/presentation/features/pipeline/pipeline_config_screen.dart';
 import 'package:aitelier/presentation/features/workspace/api_key_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -27,6 +28,15 @@ class WorkspacePage extends ConsumerWidget {
               );
             },
           ),
+          IconButton(onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => PipelineConfigScreen(),
+              ),
+            );
+          },
+          icon: const Icon(Icons.phonelink_setup_outlined)
+          )
         ],
       ),
       floatingActionButton: FloatingActionButton(

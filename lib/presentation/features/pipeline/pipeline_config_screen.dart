@@ -1,4 +1,5 @@
 import 'package:aitelier/infrastructure/dependencies.dart';
+import 'package:aitelier/presentation/features/pipeline/create_pipeline_dialog.dart';
 import 'package:aitelier/presentation/providers/pipeline_ui_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,6 +13,15 @@ class PipelineConfigScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Pipelines')),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (_) => const CreatePipelineDialog(),
+          );
+        },
+      ),
       body: pipelinesAsync.when(
         data: (pipelines) => ListView.builder(
           itemCount: pipelines.length,
