@@ -22,4 +22,12 @@ class LLMRepositoryImpl implements LLMRepository {
   ) {
     return provider.execute(request);
   }
+
+  @override
+  Future<List<double>> createEmbedding({
+    required String input,
+    required String model,
+  }) {
+    return provider.createEmbedding(input: input, model: model);
+  }
 }

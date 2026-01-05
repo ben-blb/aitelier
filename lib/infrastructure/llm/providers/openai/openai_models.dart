@@ -80,3 +80,30 @@ class OpenAIChatResponse {
     );
   }
 }
+
+class OpenAIEmbeddingResponse {
+  final List<OpenAIEmbeddingData> data;
+
+  OpenAIEmbeddingResponse({required this.data});
+
+  factory OpenAIEmbeddingResponse.fromJson(Map<String, dynamic> json) {
+    return OpenAIEmbeddingResponse(
+      data: (json['data'] as List)
+          .map((e) => OpenAIEmbeddingData.fromJson(e))
+          .toList(),
+    );
+  }
+}
+
+class OpenAIEmbeddingData {
+  final List<double> embedding;
+
+  OpenAIEmbeddingData({required this.embedding});
+
+  factory OpenAIEmbeddingData.fromJson(Map<String, dynamic> json) {
+    return OpenAIEmbeddingData(
+      embedding: List<double>.from(json['embedding']),
+    );
+  }
+}
+

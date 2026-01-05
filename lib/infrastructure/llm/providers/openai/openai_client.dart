@@ -51,4 +51,30 @@ class OpenAIClient {
       yield chunk;
     }
   }
+
+  Future<OpenAIEmbeddingResponse> createEmbedding({
+    required String model,
+    required String input,
+  }) async {
+    final response = await http.post(
+      Uri.parse('https://api.openai.com/v1/embeddings'),
+      headers: {
+        'Authorization': 'Bearer $apiKey',
+        'Content-Type': 'application/json',
+      },
+      body: {
+        'model': model,
+        'input': input,
+      },
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception(response.body);
+    }
+
+    return OpenAIEmbeddingResponse.fromJson(
+      jsonDecode(response.body),
+    );
+  }
+
 }

@@ -69,4 +69,16 @@ class OpenAILLMProvider implements LLMProvider {
     );
   }
 
+  @override
+  Future<List<double>> createEmbedding({
+    required String input,
+    required String model,
+  }) async {
+    final response = await client.createEmbedding(
+      model: model,
+      input: input,
+    );
+
+    return response.data.first.embedding;
+  }
 }

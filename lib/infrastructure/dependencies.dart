@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:aitelier/application/artifacts/processors/generic_artifact_processor.dart';
 import 'package:aitelier/core/dependencies.dart';
+import 'package:aitelier/domain/repositories/knowledge_embedding_repository.dart';
 import 'package:aitelier/domain/services/conversation_git_hook.dart';
 import 'package:aitelier/domain/services/secret_storage.dart';
 import 'package:aitelier/infrastructure/artifacts/index/artifact_index_service.dart';
@@ -18,6 +19,10 @@ import 'package:aitelier/infrastructure/conversations/drift_conversation_reposit
 import 'package:aitelier/infrastructure/conversations/models/conversation_dao.dart';
 import 'package:aitelier/infrastructure/git/conversation_git_hook.dart';
 import 'package:aitelier/infrastructure/git/local_git_service.dart';
+import 'package:aitelier/infrastructure/knowledge/persistence/knowledge_embedding_dao.dart';
+import 'package:aitelier/infrastructure/knowledge/persistence/sqlite_knowledge_embedding_repository.dart';
+import 'package:aitelier/infrastructure/knowledge/vector_store/in_memory_store.dart';
+import 'package:aitelier/infrastructure/knowledge/vector_store/vector_store.dart';
 import 'package:aitelier/infrastructure/pipeline/models/pipeline_dao.dart';
 import 'package:aitelier/infrastructure/pipeline/models/pipeline_purpose_dao.dart';
 import 'package:aitelier/infrastructure/pipeline/pipeline_purpose_repository_impl.dart';
@@ -177,4 +182,16 @@ final pipelinePurposeDaoProvider = Provider<PipelinePurposeDao>((ref) {
 
 final pipelinePurposeRepositoryProvider = Provider<PipelinePurposeRepositoryImpl>((ref) {
   return PipelinePurposeRepositoryImpl(ref.watch(pipelinePurposeDaoProvider));
+});
+
+final vectorStoreProvider = Provider<VectorStore>((ref) {
+  return InMemoryVectorStore(); // replace in 5.3
+});
+
+final knowledgeEmbeddingRepositoryProvider =
+    Provider<KnowledgeEmbeddingRepository>((ref) {
+  final db = ref.read(appDatabaseProvider);
+  return SqliteKnowledgeEmbeddingRepository(
+    KnowledgeEmbeddingDao(db),
+  );
 });

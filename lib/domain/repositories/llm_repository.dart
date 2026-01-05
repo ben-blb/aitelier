@@ -10,4 +10,9 @@ abstract class LLMRepository {
   Future<LLMExecutionResult> execute(
     LLMExecutionRequest request,
   );
+
+  Future<List<double>> createEmbedding({
+    required String input,
+    required String model,
+  });
 }

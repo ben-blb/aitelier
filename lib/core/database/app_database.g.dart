@@ -1971,6 +1971,330 @@ class KnowledgeChunksTableCompanion
   }
 }
 
+class $KnowledgeEmbeddingsTableTable extends KnowledgeEmbeddingsTable
+    with
+        TableInfo<
+          $KnowledgeEmbeddingsTableTable,
+          KnowledgeEmbeddingsTableData
+        > {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $KnowledgeEmbeddingsTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _chunkIdMeta = const VerificationMeta(
+    'chunkId',
+  );
+  @override
+  late final GeneratedColumn<String> chunkId = GeneratedColumn<String>(
+    'chunk_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _versionMeta = const VerificationMeta(
+    'version',
+  );
+  @override
+  late final GeneratedColumn<int> version = GeneratedColumn<int>(
+    'version',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _modelMeta = const VerificationMeta('model');
+  @override
+  late final GeneratedColumn<String> model = GeneratedColumn<String>(
+    'model',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [chunkId, version, model, createdAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'knowledge_embeddings_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<KnowledgeEmbeddingsTableData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('chunk_id')) {
+      context.handle(
+        _chunkIdMeta,
+        chunkId.isAcceptableOrUnknown(data['chunk_id']!, _chunkIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_chunkIdMeta);
+    }
+    if (data.containsKey('version')) {
+      context.handle(
+        _versionMeta,
+        version.isAcceptableOrUnknown(data['version']!, _versionMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_versionMeta);
+    }
+    if (data.containsKey('model')) {
+      context.handle(
+        _modelMeta,
+        model.isAcceptableOrUnknown(data['model']!, _modelMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_modelMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {chunkId};
+  @override
+  KnowledgeEmbeddingsTableData map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return KnowledgeEmbeddingsTableData(
+      chunkId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}chunk_id'],
+      )!,
+      version: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}version'],
+      )!,
+      model: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}model'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+    );
+  }
+
+  @override
+  $KnowledgeEmbeddingsTableTable createAlias(String alias) {
+    return $KnowledgeEmbeddingsTableTable(attachedDatabase, alias);
+  }
+}
+
+class KnowledgeEmbeddingsTableData extends DataClass
+    implements Insertable<KnowledgeEmbeddingsTableData> {
+  final String chunkId;
+  final int version;
+  final String model;
+  final DateTime createdAt;
+  const KnowledgeEmbeddingsTableData({
+    required this.chunkId,
+    required this.version,
+    required this.model,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['chunk_id'] = Variable<String>(chunkId);
+    map['version'] = Variable<int>(version);
+    map['model'] = Variable<String>(model);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  KnowledgeEmbeddingsTableCompanion toCompanion(bool nullToAbsent) {
+    return KnowledgeEmbeddingsTableCompanion(
+      chunkId: Value(chunkId),
+      version: Value(version),
+      model: Value(model),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory KnowledgeEmbeddingsTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return KnowledgeEmbeddingsTableData(
+      chunkId: serializer.fromJson<String>(json['chunkId']),
+      version: serializer.fromJson<int>(json['version']),
+      model: serializer.fromJson<String>(json['model']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'chunkId': serializer.toJson<String>(chunkId),
+      'version': serializer.toJson<int>(version),
+      'model': serializer.toJson<String>(model),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  KnowledgeEmbeddingsTableData copyWith({
+    String? chunkId,
+    int? version,
+    String? model,
+    DateTime? createdAt,
+  }) => KnowledgeEmbeddingsTableData(
+    chunkId: chunkId ?? this.chunkId,
+    version: version ?? this.version,
+    model: model ?? this.model,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  KnowledgeEmbeddingsTableData copyWithCompanion(
+    KnowledgeEmbeddingsTableCompanion data,
+  ) {
+    return KnowledgeEmbeddingsTableData(
+      chunkId: data.chunkId.present ? data.chunkId.value : this.chunkId,
+      version: data.version.present ? data.version.value : this.version,
+      model: data.model.present ? data.model.value : this.model,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('KnowledgeEmbeddingsTableData(')
+          ..write('chunkId: $chunkId, ')
+          ..write('version: $version, ')
+          ..write('model: $model, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(chunkId, version, model, createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is KnowledgeEmbeddingsTableData &&
+          other.chunkId == this.chunkId &&
+          other.version == this.version &&
+          other.model == this.model &&
+          other.createdAt == this.createdAt);
+}
+
+class KnowledgeEmbeddingsTableCompanion
+    extends UpdateCompanion<KnowledgeEmbeddingsTableData> {
+  final Value<String> chunkId;
+  final Value<int> version;
+  final Value<String> model;
+  final Value<DateTime> createdAt;
+  final Value<int> rowid;
+  const KnowledgeEmbeddingsTableCompanion({
+    this.chunkId = const Value.absent(),
+    this.version = const Value.absent(),
+    this.model = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  KnowledgeEmbeddingsTableCompanion.insert({
+    required String chunkId,
+    required int version,
+    required String model,
+    required DateTime createdAt,
+    this.rowid = const Value.absent(),
+  }) : chunkId = Value(chunkId),
+       version = Value(version),
+       model = Value(model),
+       createdAt = Value(createdAt);
+  static Insertable<KnowledgeEmbeddingsTableData> custom({
+    Expression<String>? chunkId,
+    Expression<int>? version,
+    Expression<String>? model,
+    Expression<DateTime>? createdAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (chunkId != null) 'chunk_id': chunkId,
+      if (version != null) 'version': version,
+      if (model != null) 'model': model,
+      if (createdAt != null) 'created_at': createdAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  KnowledgeEmbeddingsTableCompanion copyWith({
+    Value<String>? chunkId,
+    Value<int>? version,
+    Value<String>? model,
+    Value<DateTime>? createdAt,
+    Value<int>? rowid,
+  }) {
+    return KnowledgeEmbeddingsTableCompanion(
+      chunkId: chunkId ?? this.chunkId,
+      version: version ?? this.version,
+      model: model ?? this.model,
+      createdAt: createdAt ?? this.createdAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (chunkId.present) {
+      map['chunk_id'] = Variable<String>(chunkId.value);
+    }
+    if (version.present) {
+      map['version'] = Variable<int>(version.value);
+    }
+    if (model.present) {
+      map['model'] = Variable<String>(model.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('KnowledgeEmbeddingsTableCompanion(')
+          ..write('chunkId: $chunkId, ')
+          ..write('version: $version, ')
+          ..write('model: $model, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -1983,6 +2307,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $PipelinePurposeTableTable(this);
   late final $KnowledgeChunksTableTable knowledgeChunksTable =
       $KnowledgeChunksTableTable(this);
+  late final $KnowledgeEmbeddingsTableTable knowledgeEmbeddingsTable =
+      $KnowledgeEmbeddingsTableTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -1993,6 +2319,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     pipelinesTable,
     pipelinePurposeTable,
     knowledgeChunksTable,
+    knowledgeEmbeddingsTable,
   ];
 }
 
@@ -3099,6 +3426,206 @@ typedef $$KnowledgeChunksTableTableProcessedTableManager =
       KnowledgeChunksTableData,
       PrefetchHooks Function()
     >;
+typedef $$KnowledgeEmbeddingsTableTableCreateCompanionBuilder =
+    KnowledgeEmbeddingsTableCompanion Function({
+      required String chunkId,
+      required int version,
+      required String model,
+      required DateTime createdAt,
+      Value<int> rowid,
+    });
+typedef $$KnowledgeEmbeddingsTableTableUpdateCompanionBuilder =
+    KnowledgeEmbeddingsTableCompanion Function({
+      Value<String> chunkId,
+      Value<int> version,
+      Value<String> model,
+      Value<DateTime> createdAt,
+      Value<int> rowid,
+    });
+
+class $$KnowledgeEmbeddingsTableTableFilterComposer
+    extends Composer<_$AppDatabase, $KnowledgeEmbeddingsTableTable> {
+  $$KnowledgeEmbeddingsTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get chunkId => $composableBuilder(
+    column: $table.chunkId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get version => $composableBuilder(
+    column: $table.version,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get model => $composableBuilder(
+    column: $table.model,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$KnowledgeEmbeddingsTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $KnowledgeEmbeddingsTableTable> {
+  $$KnowledgeEmbeddingsTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get chunkId => $composableBuilder(
+    column: $table.chunkId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get version => $composableBuilder(
+    column: $table.version,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get model => $composableBuilder(
+    column: $table.model,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$KnowledgeEmbeddingsTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $KnowledgeEmbeddingsTableTable> {
+  $$KnowledgeEmbeddingsTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get chunkId =>
+      $composableBuilder(column: $table.chunkId, builder: (column) => column);
+
+  GeneratedColumn<int> get version =>
+      $composableBuilder(column: $table.version, builder: (column) => column);
+
+  GeneratedColumn<String> get model =>
+      $composableBuilder(column: $table.model, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+}
+
+class $$KnowledgeEmbeddingsTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $KnowledgeEmbeddingsTableTable,
+          KnowledgeEmbeddingsTableData,
+          $$KnowledgeEmbeddingsTableTableFilterComposer,
+          $$KnowledgeEmbeddingsTableTableOrderingComposer,
+          $$KnowledgeEmbeddingsTableTableAnnotationComposer,
+          $$KnowledgeEmbeddingsTableTableCreateCompanionBuilder,
+          $$KnowledgeEmbeddingsTableTableUpdateCompanionBuilder,
+          (
+            KnowledgeEmbeddingsTableData,
+            BaseReferences<
+              _$AppDatabase,
+              $KnowledgeEmbeddingsTableTable,
+              KnowledgeEmbeddingsTableData
+            >,
+          ),
+          KnowledgeEmbeddingsTableData,
+          PrefetchHooks Function()
+        > {
+  $$KnowledgeEmbeddingsTableTableTableManager(
+    _$AppDatabase db,
+    $KnowledgeEmbeddingsTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$KnowledgeEmbeddingsTableTableFilterComposer(
+                $db: db,
+                $table: table,
+              ),
+          createOrderingComposer: () =>
+              $$KnowledgeEmbeddingsTableTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$KnowledgeEmbeddingsTableTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> chunkId = const Value.absent(),
+                Value<int> version = const Value.absent(),
+                Value<String> model = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => KnowledgeEmbeddingsTableCompanion(
+                chunkId: chunkId,
+                version: version,
+                model: model,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String chunkId,
+                required int version,
+                required String model,
+                required DateTime createdAt,
+                Value<int> rowid = const Value.absent(),
+              }) => KnowledgeEmbeddingsTableCompanion.insert(
+                chunkId: chunkId,
+                version: version,
+                model: model,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$KnowledgeEmbeddingsTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $KnowledgeEmbeddingsTableTable,
+      KnowledgeEmbeddingsTableData,
+      $$KnowledgeEmbeddingsTableTableFilterComposer,
+      $$KnowledgeEmbeddingsTableTableOrderingComposer,
+      $$KnowledgeEmbeddingsTableTableAnnotationComposer,
+      $$KnowledgeEmbeddingsTableTableCreateCompanionBuilder,
+      $$KnowledgeEmbeddingsTableTableUpdateCompanionBuilder,
+      (
+        KnowledgeEmbeddingsTableData,
+        BaseReferences<
+          _$AppDatabase,
+          $KnowledgeEmbeddingsTableTable,
+          KnowledgeEmbeddingsTableData
+        >,
+      ),
+      KnowledgeEmbeddingsTableData,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -3113,4 +3640,9 @@ class $AppDatabaseManager {
       $$PipelinePurposeTableTableTableManager(_db, _db.pipelinePurposeTable);
   $$KnowledgeChunksTableTableTableManager get knowledgeChunksTable =>
       $$KnowledgeChunksTableTableTableManager(_db, _db.knowledgeChunksTable);
+  $$KnowledgeEmbeddingsTableTableTableManager get knowledgeEmbeddingsTable =>
+      $$KnowledgeEmbeddingsTableTableTableManager(
+        _db,
+        _db.knowledgeEmbeddingsTable,
+      );
 }
