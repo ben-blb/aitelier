@@ -1406,6 +1406,571 @@ class PipelinePurposeTableCompanion
   }
 }
 
+class $KnowledgeChunksTableTable extends KnowledgeChunksTable
+    with TableInfo<$KnowledgeChunksTableTable, KnowledgeChunksTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $KnowledgeChunksTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _projectIdMeta = const VerificationMeta(
+    'projectId',
+  );
+  @override
+  late final GeneratedColumn<String> projectId = GeneratedColumn<String>(
+    'project_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _sourceMeta = const VerificationMeta('source');
+  @override
+  late final GeneratedColumn<String> source = GeneratedColumn<String>(
+    'source',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _sourceIdMeta = const VerificationMeta(
+    'sourceId',
+  );
+  @override
+  late final GeneratedColumn<String> sourceId = GeneratedColumn<String>(
+    'source_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _positionMeta = const VerificationMeta(
+    'position',
+  );
+  @override
+  late final GeneratedColumn<int> position = GeneratedColumn<int>(
+    'position',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _charStartMeta = const VerificationMeta(
+    'charStart',
+  );
+  @override
+  late final GeneratedColumn<int> charStart = GeneratedColumn<int>(
+    'char_start',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _charEndMeta = const VerificationMeta(
+    'charEnd',
+  );
+  @override
+  late final GeneratedColumn<int> charEnd = GeneratedColumn<int>(
+    'char_end',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _versionMeta = const VerificationMeta(
+    'version',
+  );
+  @override
+  late final GeneratedColumn<int> version = GeneratedColumn<int>(
+    'version',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    projectId,
+    source,
+    sourceId,
+    position,
+    charStart,
+    charEnd,
+    version,
+    createdAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'knowledge_chunks_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<KnowledgeChunksTableData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('project_id')) {
+      context.handle(
+        _projectIdMeta,
+        projectId.isAcceptableOrUnknown(data['project_id']!, _projectIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_projectIdMeta);
+    }
+    if (data.containsKey('source')) {
+      context.handle(
+        _sourceMeta,
+        source.isAcceptableOrUnknown(data['source']!, _sourceMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_sourceMeta);
+    }
+    if (data.containsKey('source_id')) {
+      context.handle(
+        _sourceIdMeta,
+        sourceId.isAcceptableOrUnknown(data['source_id']!, _sourceIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_sourceIdMeta);
+    }
+    if (data.containsKey('position')) {
+      context.handle(
+        _positionMeta,
+        position.isAcceptableOrUnknown(data['position']!, _positionMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_positionMeta);
+    }
+    if (data.containsKey('char_start')) {
+      context.handle(
+        _charStartMeta,
+        charStart.isAcceptableOrUnknown(data['char_start']!, _charStartMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_charStartMeta);
+    }
+    if (data.containsKey('char_end')) {
+      context.handle(
+        _charEndMeta,
+        charEnd.isAcceptableOrUnknown(data['char_end']!, _charEndMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_charEndMeta);
+    }
+    if (data.containsKey('version')) {
+      context.handle(
+        _versionMeta,
+        version.isAcceptableOrUnknown(data['version']!, _versionMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_versionMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  KnowledgeChunksTableData map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return KnowledgeChunksTableData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      projectId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}project_id'],
+      )!,
+      source: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}source'],
+      )!,
+      sourceId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}source_id'],
+      )!,
+      position: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}position'],
+      )!,
+      charStart: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}char_start'],
+      )!,
+      charEnd: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}char_end'],
+      )!,
+      version: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}version'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+    );
+  }
+
+  @override
+  $KnowledgeChunksTableTable createAlias(String alias) {
+    return $KnowledgeChunksTableTable(attachedDatabase, alias);
+  }
+}
+
+class KnowledgeChunksTableData extends DataClass
+    implements Insertable<KnowledgeChunksTableData> {
+  final String id;
+  final String projectId;
+  final String source;
+  final String sourceId;
+  final int position;
+  final int charStart;
+  final int charEnd;
+  final int version;
+  final DateTime createdAt;
+  const KnowledgeChunksTableData({
+    required this.id,
+    required this.projectId,
+    required this.source,
+    required this.sourceId,
+    required this.position,
+    required this.charStart,
+    required this.charEnd,
+    required this.version,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['project_id'] = Variable<String>(projectId);
+    map['source'] = Variable<String>(source);
+    map['source_id'] = Variable<String>(sourceId);
+    map['position'] = Variable<int>(position);
+    map['char_start'] = Variable<int>(charStart);
+    map['char_end'] = Variable<int>(charEnd);
+    map['version'] = Variable<int>(version);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  KnowledgeChunksTableCompanion toCompanion(bool nullToAbsent) {
+    return KnowledgeChunksTableCompanion(
+      id: Value(id),
+      projectId: Value(projectId),
+      source: Value(source),
+      sourceId: Value(sourceId),
+      position: Value(position),
+      charStart: Value(charStart),
+      charEnd: Value(charEnd),
+      version: Value(version),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory KnowledgeChunksTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return KnowledgeChunksTableData(
+      id: serializer.fromJson<String>(json['id']),
+      projectId: serializer.fromJson<String>(json['projectId']),
+      source: serializer.fromJson<String>(json['source']),
+      sourceId: serializer.fromJson<String>(json['sourceId']),
+      position: serializer.fromJson<int>(json['position']),
+      charStart: serializer.fromJson<int>(json['charStart']),
+      charEnd: serializer.fromJson<int>(json['charEnd']),
+      version: serializer.fromJson<int>(json['version']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'projectId': serializer.toJson<String>(projectId),
+      'source': serializer.toJson<String>(source),
+      'sourceId': serializer.toJson<String>(sourceId),
+      'position': serializer.toJson<int>(position),
+      'charStart': serializer.toJson<int>(charStart),
+      'charEnd': serializer.toJson<int>(charEnd),
+      'version': serializer.toJson<int>(version),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  KnowledgeChunksTableData copyWith({
+    String? id,
+    String? projectId,
+    String? source,
+    String? sourceId,
+    int? position,
+    int? charStart,
+    int? charEnd,
+    int? version,
+    DateTime? createdAt,
+  }) => KnowledgeChunksTableData(
+    id: id ?? this.id,
+    projectId: projectId ?? this.projectId,
+    source: source ?? this.source,
+    sourceId: sourceId ?? this.sourceId,
+    position: position ?? this.position,
+    charStart: charStart ?? this.charStart,
+    charEnd: charEnd ?? this.charEnd,
+    version: version ?? this.version,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  KnowledgeChunksTableData copyWithCompanion(
+    KnowledgeChunksTableCompanion data,
+  ) {
+    return KnowledgeChunksTableData(
+      id: data.id.present ? data.id.value : this.id,
+      projectId: data.projectId.present ? data.projectId.value : this.projectId,
+      source: data.source.present ? data.source.value : this.source,
+      sourceId: data.sourceId.present ? data.sourceId.value : this.sourceId,
+      position: data.position.present ? data.position.value : this.position,
+      charStart: data.charStart.present ? data.charStart.value : this.charStart,
+      charEnd: data.charEnd.present ? data.charEnd.value : this.charEnd,
+      version: data.version.present ? data.version.value : this.version,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('KnowledgeChunksTableData(')
+          ..write('id: $id, ')
+          ..write('projectId: $projectId, ')
+          ..write('source: $source, ')
+          ..write('sourceId: $sourceId, ')
+          ..write('position: $position, ')
+          ..write('charStart: $charStart, ')
+          ..write('charEnd: $charEnd, ')
+          ..write('version: $version, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    projectId,
+    source,
+    sourceId,
+    position,
+    charStart,
+    charEnd,
+    version,
+    createdAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is KnowledgeChunksTableData &&
+          other.id == this.id &&
+          other.projectId == this.projectId &&
+          other.source == this.source &&
+          other.sourceId == this.sourceId &&
+          other.position == this.position &&
+          other.charStart == this.charStart &&
+          other.charEnd == this.charEnd &&
+          other.version == this.version &&
+          other.createdAt == this.createdAt);
+}
+
+class KnowledgeChunksTableCompanion
+    extends UpdateCompanion<KnowledgeChunksTableData> {
+  final Value<String> id;
+  final Value<String> projectId;
+  final Value<String> source;
+  final Value<String> sourceId;
+  final Value<int> position;
+  final Value<int> charStart;
+  final Value<int> charEnd;
+  final Value<int> version;
+  final Value<DateTime> createdAt;
+  final Value<int> rowid;
+  const KnowledgeChunksTableCompanion({
+    this.id = const Value.absent(),
+    this.projectId = const Value.absent(),
+    this.source = const Value.absent(),
+    this.sourceId = const Value.absent(),
+    this.position = const Value.absent(),
+    this.charStart = const Value.absent(),
+    this.charEnd = const Value.absent(),
+    this.version = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  KnowledgeChunksTableCompanion.insert({
+    required String id,
+    required String projectId,
+    required String source,
+    required String sourceId,
+    required int position,
+    required int charStart,
+    required int charEnd,
+    required int version,
+    required DateTime createdAt,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       projectId = Value(projectId),
+       source = Value(source),
+       sourceId = Value(sourceId),
+       position = Value(position),
+       charStart = Value(charStart),
+       charEnd = Value(charEnd),
+       version = Value(version),
+       createdAt = Value(createdAt);
+  static Insertable<KnowledgeChunksTableData> custom({
+    Expression<String>? id,
+    Expression<String>? projectId,
+    Expression<String>? source,
+    Expression<String>? sourceId,
+    Expression<int>? position,
+    Expression<int>? charStart,
+    Expression<int>? charEnd,
+    Expression<int>? version,
+    Expression<DateTime>? createdAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (projectId != null) 'project_id': projectId,
+      if (source != null) 'source': source,
+      if (sourceId != null) 'source_id': sourceId,
+      if (position != null) 'position': position,
+      if (charStart != null) 'char_start': charStart,
+      if (charEnd != null) 'char_end': charEnd,
+      if (version != null) 'version': version,
+      if (createdAt != null) 'created_at': createdAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  KnowledgeChunksTableCompanion copyWith({
+    Value<String>? id,
+    Value<String>? projectId,
+    Value<String>? source,
+    Value<String>? sourceId,
+    Value<int>? position,
+    Value<int>? charStart,
+    Value<int>? charEnd,
+    Value<int>? version,
+    Value<DateTime>? createdAt,
+    Value<int>? rowid,
+  }) {
+    return KnowledgeChunksTableCompanion(
+      id: id ?? this.id,
+      projectId: projectId ?? this.projectId,
+      source: source ?? this.source,
+      sourceId: sourceId ?? this.sourceId,
+      position: position ?? this.position,
+      charStart: charStart ?? this.charStart,
+      charEnd: charEnd ?? this.charEnd,
+      version: version ?? this.version,
+      createdAt: createdAt ?? this.createdAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (projectId.present) {
+      map['project_id'] = Variable<String>(projectId.value);
+    }
+    if (source.present) {
+      map['source'] = Variable<String>(source.value);
+    }
+    if (sourceId.present) {
+      map['source_id'] = Variable<String>(sourceId.value);
+    }
+    if (position.present) {
+      map['position'] = Variable<int>(position.value);
+    }
+    if (charStart.present) {
+      map['char_start'] = Variable<int>(charStart.value);
+    }
+    if (charEnd.present) {
+      map['char_end'] = Variable<int>(charEnd.value);
+    }
+    if (version.present) {
+      map['version'] = Variable<int>(version.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('KnowledgeChunksTableCompanion(')
+          ..write('id: $id, ')
+          ..write('projectId: $projectId, ')
+          ..write('source: $source, ')
+          ..write('sourceId: $sourceId, ')
+          ..write('position: $position, ')
+          ..write('charStart: $charStart, ')
+          ..write('charEnd: $charEnd, ')
+          ..write('version: $version, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -1416,6 +1981,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $PipelinesTableTable pipelinesTable = $PipelinesTableTable(this);
   late final $PipelinePurposeTableTable pipelinePurposeTable =
       $PipelinePurposeTableTable(this);
+  late final $KnowledgeChunksTableTable knowledgeChunksTable =
+      $KnowledgeChunksTableTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -1425,6 +1992,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     llmSettingsTable,
     pipelinesTable,
     pipelinePurposeTable,
+    knowledgeChunksTable,
   ];
 }
 
@@ -2239,6 +2807,298 @@ typedef $$PipelinePurposeTableTableProcessedTableManager =
       PipelinePurposeTableData,
       PrefetchHooks Function()
     >;
+typedef $$KnowledgeChunksTableTableCreateCompanionBuilder =
+    KnowledgeChunksTableCompanion Function({
+      required String id,
+      required String projectId,
+      required String source,
+      required String sourceId,
+      required int position,
+      required int charStart,
+      required int charEnd,
+      required int version,
+      required DateTime createdAt,
+      Value<int> rowid,
+    });
+typedef $$KnowledgeChunksTableTableUpdateCompanionBuilder =
+    KnowledgeChunksTableCompanion Function({
+      Value<String> id,
+      Value<String> projectId,
+      Value<String> source,
+      Value<String> sourceId,
+      Value<int> position,
+      Value<int> charStart,
+      Value<int> charEnd,
+      Value<int> version,
+      Value<DateTime> createdAt,
+      Value<int> rowid,
+    });
+
+class $$KnowledgeChunksTableTableFilterComposer
+    extends Composer<_$AppDatabase, $KnowledgeChunksTableTable> {
+  $$KnowledgeChunksTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get projectId => $composableBuilder(
+    column: $table.projectId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get source => $composableBuilder(
+    column: $table.source,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get sourceId => $composableBuilder(
+    column: $table.sourceId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get position => $composableBuilder(
+    column: $table.position,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get charStart => $composableBuilder(
+    column: $table.charStart,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get charEnd => $composableBuilder(
+    column: $table.charEnd,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get version => $composableBuilder(
+    column: $table.version,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$KnowledgeChunksTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $KnowledgeChunksTableTable> {
+  $$KnowledgeChunksTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get projectId => $composableBuilder(
+    column: $table.projectId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get source => $composableBuilder(
+    column: $table.source,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get sourceId => $composableBuilder(
+    column: $table.sourceId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get position => $composableBuilder(
+    column: $table.position,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get charStart => $composableBuilder(
+    column: $table.charStart,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get charEnd => $composableBuilder(
+    column: $table.charEnd,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get version => $composableBuilder(
+    column: $table.version,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$KnowledgeChunksTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $KnowledgeChunksTableTable> {
+  $$KnowledgeChunksTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get projectId =>
+      $composableBuilder(column: $table.projectId, builder: (column) => column);
+
+  GeneratedColumn<String> get source =>
+      $composableBuilder(column: $table.source, builder: (column) => column);
+
+  GeneratedColumn<String> get sourceId =>
+      $composableBuilder(column: $table.sourceId, builder: (column) => column);
+
+  GeneratedColumn<int> get position =>
+      $composableBuilder(column: $table.position, builder: (column) => column);
+
+  GeneratedColumn<int> get charStart =>
+      $composableBuilder(column: $table.charStart, builder: (column) => column);
+
+  GeneratedColumn<int> get charEnd =>
+      $composableBuilder(column: $table.charEnd, builder: (column) => column);
+
+  GeneratedColumn<int> get version =>
+      $composableBuilder(column: $table.version, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+}
+
+class $$KnowledgeChunksTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $KnowledgeChunksTableTable,
+          KnowledgeChunksTableData,
+          $$KnowledgeChunksTableTableFilterComposer,
+          $$KnowledgeChunksTableTableOrderingComposer,
+          $$KnowledgeChunksTableTableAnnotationComposer,
+          $$KnowledgeChunksTableTableCreateCompanionBuilder,
+          $$KnowledgeChunksTableTableUpdateCompanionBuilder,
+          (
+            KnowledgeChunksTableData,
+            BaseReferences<
+              _$AppDatabase,
+              $KnowledgeChunksTableTable,
+              KnowledgeChunksTableData
+            >,
+          ),
+          KnowledgeChunksTableData,
+          PrefetchHooks Function()
+        > {
+  $$KnowledgeChunksTableTableTableManager(
+    _$AppDatabase db,
+    $KnowledgeChunksTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$KnowledgeChunksTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$KnowledgeChunksTableTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$KnowledgeChunksTableTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> projectId = const Value.absent(),
+                Value<String> source = const Value.absent(),
+                Value<String> sourceId = const Value.absent(),
+                Value<int> position = const Value.absent(),
+                Value<int> charStart = const Value.absent(),
+                Value<int> charEnd = const Value.absent(),
+                Value<int> version = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => KnowledgeChunksTableCompanion(
+                id: id,
+                projectId: projectId,
+                source: source,
+                sourceId: sourceId,
+                position: position,
+                charStart: charStart,
+                charEnd: charEnd,
+                version: version,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String projectId,
+                required String source,
+                required String sourceId,
+                required int position,
+                required int charStart,
+                required int charEnd,
+                required int version,
+                required DateTime createdAt,
+                Value<int> rowid = const Value.absent(),
+              }) => KnowledgeChunksTableCompanion.insert(
+                id: id,
+                projectId: projectId,
+                source: source,
+                sourceId: sourceId,
+                position: position,
+                charStart: charStart,
+                charEnd: charEnd,
+                version: version,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$KnowledgeChunksTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $KnowledgeChunksTableTable,
+      KnowledgeChunksTableData,
+      $$KnowledgeChunksTableTableFilterComposer,
+      $$KnowledgeChunksTableTableOrderingComposer,
+      $$KnowledgeChunksTableTableAnnotationComposer,
+      $$KnowledgeChunksTableTableCreateCompanionBuilder,
+      $$KnowledgeChunksTableTableUpdateCompanionBuilder,
+      (
+        KnowledgeChunksTableData,
+        BaseReferences<
+          _$AppDatabase,
+          $KnowledgeChunksTableTable,
+          KnowledgeChunksTableData
+        >,
+      ),
+      KnowledgeChunksTableData,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -2251,4 +3111,6 @@ class $AppDatabaseManager {
       $$PipelinesTableTableTableManager(_db, _db.pipelinesTable);
   $$PipelinePurposeTableTableTableManager get pipelinePurposeTable =>
       $$PipelinePurposeTableTableTableManager(_db, _db.pipelinePurposeTable);
+  $$KnowledgeChunksTableTableTableManager get knowledgeChunksTable =>
+      $$KnowledgeChunksTableTableTableManager(_db, _db.knowledgeChunksTable);
 }
