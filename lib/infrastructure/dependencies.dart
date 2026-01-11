@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:aitelier/application/artifacts/processors/generic_artifact_processor.dart';
+import 'package:aitelier/core/database/tables/vss_vector_table.dart';
 import 'package:aitelier/core/dependencies.dart';
 import 'package:aitelier/domain/repositories/knowledge_embedding_repository.dart';
 import 'package:aitelier/domain/services/conversation_git_hook.dart';
@@ -22,6 +23,9 @@ import 'package:aitelier/infrastructure/git/local_git_service.dart';
 import 'package:aitelier/infrastructure/knowledge/persistence/knowledge_embedding_dao.dart';
 import 'package:aitelier/infrastructure/knowledge/persistence/sqlite_knowledge_embedding_repository.dart';
 import 'package:aitelier/infrastructure/knowledge/vector_store/sqlite_vector_store.dart';
+import 'package:aitelier/infrastructure/knowledge/vector_store/sqlite_vss/sqlite_vss_vector_store.dart';
+import 'package:aitelier/infrastructure/knowledge/vector_store/sqlite_vss/vss_capability_detector.dart';
+import 'package:aitelier/infrastructure/knowledge/vector_store/sqlite_vss/vss_vector_dao.dart';
 import 'package:aitelier/infrastructure/knowledge/vector_store/vector_dao.dart';
 import 'package:aitelier/infrastructure/knowledge/vector_store/vector_store.dart';
 import 'package:aitelier/infrastructure/pipeline/models/pipeline_dao.dart';
@@ -190,11 +194,22 @@ final vectorDaoProvider = Provider<VectorDao>((ref) {
   return VectorDao(db);
 });
 
-final vectorStoreProvider = Provider<VectorStore>((ref) {
+final vectorStoreProvider = FutureProvider<VectorStore>((ref) async {
+  final db = ref.read(appDatabaseProvider);
+  final detector = VssCapabilityDetector(db);
+
+  if (await detector.isAvailable()) {
+    return SqliteVssVectorStore(
+      VssVectorDao(db),
+    );
+  }
+
+  // Fallback (pure Dart cosine)
   return SqliteVectorStore(
     ref.read(vectorDaoProvider),
   );
 });
+
 
 final knowledgeEmbeddingRepositoryProvider =
     Provider<KnowledgeEmbeddingRepository>((ref) {
