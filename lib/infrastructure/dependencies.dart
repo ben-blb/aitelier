@@ -21,7 +21,8 @@ import 'package:aitelier/infrastructure/git/conversation_git_hook.dart';
 import 'package:aitelier/infrastructure/git/local_git_service.dart';
 import 'package:aitelier/infrastructure/knowledge/persistence/knowledge_embedding_dao.dart';
 import 'package:aitelier/infrastructure/knowledge/persistence/sqlite_knowledge_embedding_repository.dart';
-import 'package:aitelier/infrastructure/knowledge/vector_store/in_memory_store.dart';
+import 'package:aitelier/infrastructure/knowledge/vector_store/sqlite_vector_store.dart';
+import 'package:aitelier/infrastructure/knowledge/vector_store/vector_dao.dart';
 import 'package:aitelier/infrastructure/knowledge/vector_store/vector_store.dart';
 import 'package:aitelier/infrastructure/pipeline/models/pipeline_dao.dart';
 import 'package:aitelier/infrastructure/pipeline/models/pipeline_purpose_dao.dart';
@@ -184,8 +185,15 @@ final pipelinePurposeRepositoryProvider = Provider<PipelinePurposeRepositoryImpl
   return PipelinePurposeRepositoryImpl(ref.watch(pipelinePurposeDaoProvider));
 });
 
+final vectorDaoProvider = Provider<VectorDao>((ref) {
+  final db = ref.read(appDatabaseProvider);
+  return VectorDao(db);
+});
+
 final vectorStoreProvider = Provider<VectorStore>((ref) {
-  return InMemoryVectorStore(); // replace in 5.3
+  return SqliteVectorStore(
+    ref.read(vectorDaoProvider),
+  );
 });
 
 final knowledgeEmbeddingRepositoryProvider =

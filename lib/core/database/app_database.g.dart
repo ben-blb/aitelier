@@ -2295,6 +2295,315 @@ class KnowledgeEmbeddingsTableCompanion
   }
 }
 
+class $VectorTableTable extends VectorTable
+    with TableInfo<$VectorTableTable, VectorTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $VectorTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _vectorMeta = const VerificationMeta('vector');
+  @override
+  late final GeneratedColumn<Uint8List> vector = GeneratedColumn<Uint8List>(
+    'vector',
+    aliasedName,
+    false,
+    type: DriftSqlType.blob,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _metadataMeta = const VerificationMeta(
+    'metadata',
+  );
+  @override
+  late final GeneratedColumn<String> metadata = GeneratedColumn<String>(
+    'metadata',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, vector, metadata, createdAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'vector_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<VectorTableData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('vector')) {
+      context.handle(
+        _vectorMeta,
+        vector.isAcceptableOrUnknown(data['vector']!, _vectorMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_vectorMeta);
+    }
+    if (data.containsKey('metadata')) {
+      context.handle(
+        _metadataMeta,
+        metadata.isAcceptableOrUnknown(data['metadata']!, _metadataMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_metadataMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  VectorTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return VectorTableData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      vector: attachedDatabase.typeMapping.read(
+        DriftSqlType.blob,
+        data['${effectivePrefix}vector'],
+      )!,
+      metadata: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}metadata'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+    );
+  }
+
+  @override
+  $VectorTableTable createAlias(String alias) {
+    return $VectorTableTable(attachedDatabase, alias);
+  }
+}
+
+class VectorTableData extends DataClass implements Insertable<VectorTableData> {
+  final String id;
+  final Uint8List vector;
+  final String metadata;
+  final DateTime createdAt;
+  const VectorTableData({
+    required this.id,
+    required this.vector,
+    required this.metadata,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['vector'] = Variable<Uint8List>(vector);
+    map['metadata'] = Variable<String>(metadata);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  VectorTableCompanion toCompanion(bool nullToAbsent) {
+    return VectorTableCompanion(
+      id: Value(id),
+      vector: Value(vector),
+      metadata: Value(metadata),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory VectorTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return VectorTableData(
+      id: serializer.fromJson<String>(json['id']),
+      vector: serializer.fromJson<Uint8List>(json['vector']),
+      metadata: serializer.fromJson<String>(json['metadata']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'vector': serializer.toJson<Uint8List>(vector),
+      'metadata': serializer.toJson<String>(metadata),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  VectorTableData copyWith({
+    String? id,
+    Uint8List? vector,
+    String? metadata,
+    DateTime? createdAt,
+  }) => VectorTableData(
+    id: id ?? this.id,
+    vector: vector ?? this.vector,
+    metadata: metadata ?? this.metadata,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  VectorTableData copyWithCompanion(VectorTableCompanion data) {
+    return VectorTableData(
+      id: data.id.present ? data.id.value : this.id,
+      vector: data.vector.present ? data.vector.value : this.vector,
+      metadata: data.metadata.present ? data.metadata.value : this.metadata,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('VectorTableData(')
+          ..write('id: $id, ')
+          ..write('vector: $vector, ')
+          ..write('metadata: $metadata, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, $driftBlobEquality.hash(vector), metadata, createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is VectorTableData &&
+          other.id == this.id &&
+          $driftBlobEquality.equals(other.vector, this.vector) &&
+          other.metadata == this.metadata &&
+          other.createdAt == this.createdAt);
+}
+
+class VectorTableCompanion extends UpdateCompanion<VectorTableData> {
+  final Value<String> id;
+  final Value<Uint8List> vector;
+  final Value<String> metadata;
+  final Value<DateTime> createdAt;
+  final Value<int> rowid;
+  const VectorTableCompanion({
+    this.id = const Value.absent(),
+    this.vector = const Value.absent(),
+    this.metadata = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  VectorTableCompanion.insert({
+    required String id,
+    required Uint8List vector,
+    required String metadata,
+    required DateTime createdAt,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       vector = Value(vector),
+       metadata = Value(metadata),
+       createdAt = Value(createdAt);
+  static Insertable<VectorTableData> custom({
+    Expression<String>? id,
+    Expression<Uint8List>? vector,
+    Expression<String>? metadata,
+    Expression<DateTime>? createdAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (vector != null) 'vector': vector,
+      if (metadata != null) 'metadata': metadata,
+      if (createdAt != null) 'created_at': createdAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  VectorTableCompanion copyWith({
+    Value<String>? id,
+    Value<Uint8List>? vector,
+    Value<String>? metadata,
+    Value<DateTime>? createdAt,
+    Value<int>? rowid,
+  }) {
+    return VectorTableCompanion(
+      id: id ?? this.id,
+      vector: vector ?? this.vector,
+      metadata: metadata ?? this.metadata,
+      createdAt: createdAt ?? this.createdAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (vector.present) {
+      map['vector'] = Variable<Uint8List>(vector.value);
+    }
+    if (metadata.present) {
+      map['metadata'] = Variable<String>(metadata.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('VectorTableCompanion(')
+          ..write('id: $id, ')
+          ..write('vector: $vector, ')
+          ..write('metadata: $metadata, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -2309,6 +2618,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $KnowledgeChunksTableTable(this);
   late final $KnowledgeEmbeddingsTableTable knowledgeEmbeddingsTable =
       $KnowledgeEmbeddingsTableTable(this);
+  late final $VectorTableTable vectorTable = $VectorTableTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -2320,6 +2630,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     pipelinePurposeTable,
     knowledgeChunksTable,
     knowledgeEmbeddingsTable,
+    vectorTable,
   ];
 }
 
@@ -3626,6 +3937,187 @@ typedef $$KnowledgeEmbeddingsTableTableProcessedTableManager =
       KnowledgeEmbeddingsTableData,
       PrefetchHooks Function()
     >;
+typedef $$VectorTableTableCreateCompanionBuilder =
+    VectorTableCompanion Function({
+      required String id,
+      required Uint8List vector,
+      required String metadata,
+      required DateTime createdAt,
+      Value<int> rowid,
+    });
+typedef $$VectorTableTableUpdateCompanionBuilder =
+    VectorTableCompanion Function({
+      Value<String> id,
+      Value<Uint8List> vector,
+      Value<String> metadata,
+      Value<DateTime> createdAt,
+      Value<int> rowid,
+    });
+
+class $$VectorTableTableFilterComposer
+    extends Composer<_$AppDatabase, $VectorTableTable> {
+  $$VectorTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<Uint8List> get vector => $composableBuilder(
+    column: $table.vector,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get metadata => $composableBuilder(
+    column: $table.metadata,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$VectorTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $VectorTableTable> {
+  $$VectorTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<Uint8List> get vector => $composableBuilder(
+    column: $table.vector,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get metadata => $composableBuilder(
+    column: $table.metadata,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$VectorTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $VectorTableTable> {
+  $$VectorTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<Uint8List> get vector =>
+      $composableBuilder(column: $table.vector, builder: (column) => column);
+
+  GeneratedColumn<String> get metadata =>
+      $composableBuilder(column: $table.metadata, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+}
+
+class $$VectorTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $VectorTableTable,
+          VectorTableData,
+          $$VectorTableTableFilterComposer,
+          $$VectorTableTableOrderingComposer,
+          $$VectorTableTableAnnotationComposer,
+          $$VectorTableTableCreateCompanionBuilder,
+          $$VectorTableTableUpdateCompanionBuilder,
+          (
+            VectorTableData,
+            BaseReferences<_$AppDatabase, $VectorTableTable, VectorTableData>,
+          ),
+          VectorTableData,
+          PrefetchHooks Function()
+        > {
+  $$VectorTableTableTableManager(_$AppDatabase db, $VectorTableTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$VectorTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$VectorTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$VectorTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<Uint8List> vector = const Value.absent(),
+                Value<String> metadata = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => VectorTableCompanion(
+                id: id,
+                vector: vector,
+                metadata: metadata,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required Uint8List vector,
+                required String metadata,
+                required DateTime createdAt,
+                Value<int> rowid = const Value.absent(),
+              }) => VectorTableCompanion.insert(
+                id: id,
+                vector: vector,
+                metadata: metadata,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$VectorTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $VectorTableTable,
+      VectorTableData,
+      $$VectorTableTableFilterComposer,
+      $$VectorTableTableOrderingComposer,
+      $$VectorTableTableAnnotationComposer,
+      $$VectorTableTableCreateCompanionBuilder,
+      $$VectorTableTableUpdateCompanionBuilder,
+      (
+        VectorTableData,
+        BaseReferences<_$AppDatabase, $VectorTableTable, VectorTableData>,
+      ),
+      VectorTableData,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -3645,4 +4137,6 @@ class $AppDatabaseManager {
         _db,
         _db.knowledgeEmbeddingsTable,
       );
+  $$VectorTableTableTableManager get vectorTable =>
+      $$VectorTableTableTableManager(_db, _db.vectorTable);
 }
