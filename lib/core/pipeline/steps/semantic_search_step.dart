@@ -1,4 +1,5 @@
 import 'package:aitelier/core/pipeline/pipeline_step_handler.dart';
+import 'package:aitelier/core/utils/logger.dart';
 import 'package:aitelier/domain/entities/pipeline/pipeline_context.dart';
 import 'package:aitelier/domain/value_objects/chunk_id.dart';
 import 'package:aitelier/infrastructure/dependencies.dart';
@@ -31,6 +32,8 @@ class SemanticSearchStep implements PipelineStepHandler {
       input: query,
       model: 'text-embedding-3-small',
     );
+
+    appLogger.d('Got embeddings ${embedding.length}');
 
     final hits = await vectorStore.search(
       query: embedding,
