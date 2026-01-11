@@ -66,7 +66,8 @@ class ConversationController
           'pre.semantic_search',
           'post.output_normalization',
           'post.chunking',
-          'post.artifact_enrichment'],
+          'post.artifact_enrichment',
+          'post.semantic_linking'],
         enabled: true
       ),
       context,
