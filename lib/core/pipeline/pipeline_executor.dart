@@ -1,4 +1,5 @@
 import 'package:aitelier/core/pipeline/pipeline_registry.dart';
+import 'package:aitelier/core/utils/logger.dart';
 import 'package:aitelier/domain/entities/pipeline/pipeline.dart';
 import 'package:aitelier/domain/entities/pipeline/pipeline_context.dart';
 import 'package:aitelier/domain/entities/pipeline/pipeline_error.dart';
@@ -12,6 +13,7 @@ class PipelineExecutor {
     Pipeline pipeline,
     PipelineContext initialContext,
   ) async {
+    appLogger.d('Got pipelines $pipeline');
     if (!pipeline.enabled) {
       return initialContext;
     }

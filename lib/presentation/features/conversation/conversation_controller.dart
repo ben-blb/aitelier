@@ -63,6 +63,7 @@ class ConversationController
           'pre.context_retrieval',
           'pre.intent_classification',
           'pre.entity_extraction',
+          'pre.semantic_search',
           'post.output_normalization',
           'post.chunking',
           'post.artifact_enrichment'],
