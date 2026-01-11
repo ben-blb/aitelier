@@ -1,5 +1,6 @@
 import 'package:aitelier/domain/entities/knowledge/chunk_source.dart';
 import 'package:aitelier/domain/entities/knowledge/knowledge_chunk.dart';
+import 'package:aitelier/domain/value_objects/chunk_id.dart';
 import 'package:aitelier/domain/value_objects/project_id.dart';
 
 abstract class KnowledgeChunkRepository {
@@ -9,4 +10,5 @@ abstract class KnowledgeChunkRepository {
     ChunkSource source,
     String sourceId,
   );
+  Future<KnowledgeChunk?> findById(ChunkId id);
 }

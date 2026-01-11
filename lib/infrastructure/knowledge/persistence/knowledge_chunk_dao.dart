@@ -63,6 +63,16 @@ class KnowledgeChunkDao extends DatabaseAccessor<AppDatabase>
         .go();
   }
 
+  Future<KnowledgeChunk?> findById(ChunkId id) async {
+    final row = await (select(knowledgeChunksTable)
+          ..where((tbl) => tbl.id.equals(id.value)))
+        .getSingleOrNull();
+
+    if (row == null) return null;
+
+    return _fromRow(row);
+  }
+
   // ------------------------------------------------------------
   // MAPPERS
   // ------------------------------------------------------------

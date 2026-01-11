@@ -5,6 +5,7 @@ import 'package:aitelier/core/pipeline/steps/postprocessing/output_normalization
 import 'package:aitelier/core/pipeline/steps/preprocessing/context_retrieval_step.dart';
 import 'package:aitelier/core/pipeline/steps/preprocessing/entity_extraction_step.dart';
 import 'package:aitelier/core/pipeline/steps/preprocessing/intent_classification_step.dart';
+import 'package:aitelier/core/pipeline/steps/semantic_search_step.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
@@ -15,6 +16,10 @@ final pipelineRegistryProvider = Provider<PipelineRegistry>((ref) {
   registry.register(ContextRetrievalStep());
   registry.register(IntentClassificationStep());
   registry.register(EntityExtractionStep());
+
+  registry.register(
+    SemanticSearchStep(ref),
+  );
 
   registry.register(OutputNormalizationStep());
   registry.register(ChunkingStep());
