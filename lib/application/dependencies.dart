@@ -27,11 +27,13 @@ final createArtifactUseCaseProvider =
 final createEmbeddingsUseCaseProvider =
     FutureProvider<CreateEmbeddingsUseCase>((ref) async {
   final llm = await ref.watch(llmRepositoryProvider.future);
+  final vectorStore = await ref.watch(vectorStoreProvider.future);
 
   return CreateEmbeddingsUseCase(
     llmRepository: llm,
     embeddingRepository:
         ref.read(knowledgeEmbeddingRepositoryProvider),
-    vectorStore: ref.read(vectorStoreProvider),
+    vectorStore: vectorStore,
   );
 });
+

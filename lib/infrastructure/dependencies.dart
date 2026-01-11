@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:aitelier/application/artifacts/processors/generic_artifact_processor.dart';
-import 'package:aitelier/core/database/tables/vss_vector_table.dart';
 import 'package:aitelier/core/dependencies.dart';
 import 'package:aitelier/domain/repositories/knowledge_embedding_repository.dart';
 import 'package:aitelier/domain/services/conversation_git_hook.dart';
