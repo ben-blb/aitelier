@@ -1,6 +1,7 @@
 import 'package:aitelier/core/pipeline/pipeline_registry.dart';
 import 'package:aitelier/core/pipeline/steps/postprocessing/artifact_enrichment_step.dart';
 import 'package:aitelier/core/pipeline/steps/postprocessing/chunking_step.dart';
+import 'package:aitelier/core/pipeline/steps/postprocessing/incremental_summary_step.dart';
 import 'package:aitelier/core/pipeline/steps/postprocessing/output_normalization_step.dart';
 import 'package:aitelier/core/pipeline/steps/postprocessing/semantic_linking_step.dart';
 import 'package:aitelier/core/pipeline/steps/preprocessing/context_retrieval_step.dart';
@@ -27,6 +28,7 @@ final pipelineRegistryProvider = Provider<PipelineRegistry>((ref) {
   registry.register(OutputNormalizationStep());
   registry.register(ChunkingStep());
   registry.register(ArtifactEnrichmentStep());
+  registry.register(IncrementalSummaryStep(ref));
 
   return registry;
 });

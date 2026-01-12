@@ -2604,6 +2604,415 @@ class VectorTableCompanion extends UpdateCompanion<VectorTableData> {
   }
 }
 
+class $SummariesTableTable extends SummariesTable
+    with TableInfo<$SummariesTableTable, SummariesTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SummariesTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _scopeMeta = const VerificationMeta('scope');
+  @override
+  late final GeneratedColumn<String> scope = GeneratedColumn<String>(
+    'scope',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _scopeIdMeta = const VerificationMeta(
+    'scopeId',
+  );
+  @override
+  late final GeneratedColumn<String> scopeId = GeneratedColumn<String>(
+    'scope_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _contentMeta = const VerificationMeta(
+    'content',
+  );
+  @override
+  late final GeneratedColumn<String> content = GeneratedColumn<String>(
+    'content',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _versionMeta = const VerificationMeta(
+    'version',
+  );
+  @override
+  late final GeneratedColumn<int> version = GeneratedColumn<int>(
+    'version',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    scope,
+    scopeId,
+    content,
+    version,
+    updatedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'summaries_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<SummariesTableData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('scope')) {
+      context.handle(
+        _scopeMeta,
+        scope.isAcceptableOrUnknown(data['scope']!, _scopeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_scopeMeta);
+    }
+    if (data.containsKey('scope_id')) {
+      context.handle(
+        _scopeIdMeta,
+        scopeId.isAcceptableOrUnknown(data['scope_id']!, _scopeIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_scopeIdMeta);
+    }
+    if (data.containsKey('content')) {
+      context.handle(
+        _contentMeta,
+        content.isAcceptableOrUnknown(data['content']!, _contentMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_contentMeta);
+    }
+    if (data.containsKey('version')) {
+      context.handle(
+        _versionMeta,
+        version.isAcceptableOrUnknown(data['version']!, _versionMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_versionMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  SummariesTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return SummariesTableData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      scope: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}scope'],
+      )!,
+      scopeId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}scope_id'],
+      )!,
+      content: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}content'],
+      )!,
+      version: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}version'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
+    );
+  }
+
+  @override
+  $SummariesTableTable createAlias(String alias) {
+    return $SummariesTableTable(attachedDatabase, alias);
+  }
+}
+
+class SummariesTableData extends DataClass
+    implements Insertable<SummariesTableData> {
+  final String id;
+  final String scope;
+  final String scopeId;
+  final String content;
+  final int version;
+  final DateTime updatedAt;
+  const SummariesTableData({
+    required this.id,
+    required this.scope,
+    required this.scopeId,
+    required this.content,
+    required this.version,
+    required this.updatedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['scope'] = Variable<String>(scope);
+    map['scope_id'] = Variable<String>(scopeId);
+    map['content'] = Variable<String>(content);
+    map['version'] = Variable<int>(version);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    return map;
+  }
+
+  SummariesTableCompanion toCompanion(bool nullToAbsent) {
+    return SummariesTableCompanion(
+      id: Value(id),
+      scope: Value(scope),
+      scopeId: Value(scopeId),
+      content: Value(content),
+      version: Value(version),
+      updatedAt: Value(updatedAt),
+    );
+  }
+
+  factory SummariesTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SummariesTableData(
+      id: serializer.fromJson<String>(json['id']),
+      scope: serializer.fromJson<String>(json['scope']),
+      scopeId: serializer.fromJson<String>(json['scopeId']),
+      content: serializer.fromJson<String>(json['content']),
+      version: serializer.fromJson<int>(json['version']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'scope': serializer.toJson<String>(scope),
+      'scopeId': serializer.toJson<String>(scopeId),
+      'content': serializer.toJson<String>(content),
+      'version': serializer.toJson<int>(version),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+    };
+  }
+
+  SummariesTableData copyWith({
+    String? id,
+    String? scope,
+    String? scopeId,
+    String? content,
+    int? version,
+    DateTime? updatedAt,
+  }) => SummariesTableData(
+    id: id ?? this.id,
+    scope: scope ?? this.scope,
+    scopeId: scopeId ?? this.scopeId,
+    content: content ?? this.content,
+    version: version ?? this.version,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
+  SummariesTableData copyWithCompanion(SummariesTableCompanion data) {
+    return SummariesTableData(
+      id: data.id.present ? data.id.value : this.id,
+      scope: data.scope.present ? data.scope.value : this.scope,
+      scopeId: data.scopeId.present ? data.scopeId.value : this.scopeId,
+      content: data.content.present ? data.content.value : this.content,
+      version: data.version.present ? data.version.value : this.version,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SummariesTableData(')
+          ..write('id: $id, ')
+          ..write('scope: $scope, ')
+          ..write('scopeId: $scopeId, ')
+          ..write('content: $content, ')
+          ..write('version: $version, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, scope, scopeId, content, version, updatedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SummariesTableData &&
+          other.id == this.id &&
+          other.scope == this.scope &&
+          other.scopeId == this.scopeId &&
+          other.content == this.content &&
+          other.version == this.version &&
+          other.updatedAt == this.updatedAt);
+}
+
+class SummariesTableCompanion extends UpdateCompanion<SummariesTableData> {
+  final Value<String> id;
+  final Value<String> scope;
+  final Value<String> scopeId;
+  final Value<String> content;
+  final Value<int> version;
+  final Value<DateTime> updatedAt;
+  final Value<int> rowid;
+  const SummariesTableCompanion({
+    this.id = const Value.absent(),
+    this.scope = const Value.absent(),
+    this.scopeId = const Value.absent(),
+    this.content = const Value.absent(),
+    this.version = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  SummariesTableCompanion.insert({
+    required String id,
+    required String scope,
+    required String scopeId,
+    required String content,
+    required int version,
+    required DateTime updatedAt,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       scope = Value(scope),
+       scopeId = Value(scopeId),
+       content = Value(content),
+       version = Value(version),
+       updatedAt = Value(updatedAt);
+  static Insertable<SummariesTableData> custom({
+    Expression<String>? id,
+    Expression<String>? scope,
+    Expression<String>? scopeId,
+    Expression<String>? content,
+    Expression<int>? version,
+    Expression<DateTime>? updatedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (scope != null) 'scope': scope,
+      if (scopeId != null) 'scope_id': scopeId,
+      if (content != null) 'content': content,
+      if (version != null) 'version': version,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  SummariesTableCompanion copyWith({
+    Value<String>? id,
+    Value<String>? scope,
+    Value<String>? scopeId,
+    Value<String>? content,
+    Value<int>? version,
+    Value<DateTime>? updatedAt,
+    Value<int>? rowid,
+  }) {
+    return SummariesTableCompanion(
+      id: id ?? this.id,
+      scope: scope ?? this.scope,
+      scopeId: scopeId ?? this.scopeId,
+      content: content ?? this.content,
+      version: version ?? this.version,
+      updatedAt: updatedAt ?? this.updatedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (scope.present) {
+      map['scope'] = Variable<String>(scope.value);
+    }
+    if (scopeId.present) {
+      map['scope_id'] = Variable<String>(scopeId.value);
+    }
+    if (content.present) {
+      map['content'] = Variable<String>(content.value);
+    }
+    if (version.present) {
+      map['version'] = Variable<int>(version.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SummariesTableCompanion(')
+          ..write('id: $id, ')
+          ..write('scope: $scope, ')
+          ..write('scopeId: $scopeId, ')
+          ..write('content: $content, ')
+          ..write('version: $version, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -2619,6 +3028,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $KnowledgeEmbeddingsTableTable knowledgeEmbeddingsTable =
       $KnowledgeEmbeddingsTableTable(this);
   late final $VectorTableTable vectorTable = $VectorTableTable(this);
+  late final $SummariesTableTable summariesTable = $SummariesTableTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -2631,6 +3041,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     knowledgeChunksTable,
     knowledgeEmbeddingsTable,
     vectorTable,
+    summariesTable,
   ];
 }
 
@@ -4118,6 +4529,231 @@ typedef $$VectorTableTableProcessedTableManager =
       VectorTableData,
       PrefetchHooks Function()
     >;
+typedef $$SummariesTableTableCreateCompanionBuilder =
+    SummariesTableCompanion Function({
+      required String id,
+      required String scope,
+      required String scopeId,
+      required String content,
+      required int version,
+      required DateTime updatedAt,
+      Value<int> rowid,
+    });
+typedef $$SummariesTableTableUpdateCompanionBuilder =
+    SummariesTableCompanion Function({
+      Value<String> id,
+      Value<String> scope,
+      Value<String> scopeId,
+      Value<String> content,
+      Value<int> version,
+      Value<DateTime> updatedAt,
+      Value<int> rowid,
+    });
+
+class $$SummariesTableTableFilterComposer
+    extends Composer<_$AppDatabase, $SummariesTableTable> {
+  $$SummariesTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get scope => $composableBuilder(
+    column: $table.scope,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get scopeId => $composableBuilder(
+    column: $table.scopeId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get content => $composableBuilder(
+    column: $table.content,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get version => $composableBuilder(
+    column: $table.version,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$SummariesTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $SummariesTableTable> {
+  $$SummariesTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get scope => $composableBuilder(
+    column: $table.scope,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get scopeId => $composableBuilder(
+    column: $table.scopeId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get content => $composableBuilder(
+    column: $table.content,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get version => $composableBuilder(
+    column: $table.version,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$SummariesTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $SummariesTableTable> {
+  $$SummariesTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get scope =>
+      $composableBuilder(column: $table.scope, builder: (column) => column);
+
+  GeneratedColumn<String> get scopeId =>
+      $composableBuilder(column: $table.scopeId, builder: (column) => column);
+
+  GeneratedColumn<String> get content =>
+      $composableBuilder(column: $table.content, builder: (column) => column);
+
+  GeneratedColumn<int> get version =>
+      $composableBuilder(column: $table.version, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+}
+
+class $$SummariesTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $SummariesTableTable,
+          SummariesTableData,
+          $$SummariesTableTableFilterComposer,
+          $$SummariesTableTableOrderingComposer,
+          $$SummariesTableTableAnnotationComposer,
+          $$SummariesTableTableCreateCompanionBuilder,
+          $$SummariesTableTableUpdateCompanionBuilder,
+          (
+            SummariesTableData,
+            BaseReferences<
+              _$AppDatabase,
+              $SummariesTableTable,
+              SummariesTableData
+            >,
+          ),
+          SummariesTableData,
+          PrefetchHooks Function()
+        > {
+  $$SummariesTableTableTableManager(
+    _$AppDatabase db,
+    $SummariesTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$SummariesTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$SummariesTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$SummariesTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> scope = const Value.absent(),
+                Value<String> scopeId = const Value.absent(),
+                Value<String> content = const Value.absent(),
+                Value<int> version = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => SummariesTableCompanion(
+                id: id,
+                scope: scope,
+                scopeId: scopeId,
+                content: content,
+                version: version,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String scope,
+                required String scopeId,
+                required String content,
+                required int version,
+                required DateTime updatedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => SummariesTableCompanion.insert(
+                id: id,
+                scope: scope,
+                scopeId: scopeId,
+                content: content,
+                version: version,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$SummariesTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $SummariesTableTable,
+      SummariesTableData,
+      $$SummariesTableTableFilterComposer,
+      $$SummariesTableTableOrderingComposer,
+      $$SummariesTableTableAnnotationComposer,
+      $$SummariesTableTableCreateCompanionBuilder,
+      $$SummariesTableTableUpdateCompanionBuilder,
+      (
+        SummariesTableData,
+        BaseReferences<_$AppDatabase, $SummariesTableTable, SummariesTableData>,
+      ),
+      SummariesTableData,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -4139,4 +4775,6 @@ class $AppDatabaseManager {
       );
   $$VectorTableTableTableManager get vectorTable =>
       $$VectorTableTableTableManager(_db, _db.vectorTable);
+  $$SummariesTableTableTableManager get summariesTable =>
+      $$SummariesTableTableTableManager(_db, _db.summariesTable);
 }

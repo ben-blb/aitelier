@@ -35,9 +35,13 @@ class ConversationController
     extends FamilyAsyncNotifier<List<ConversationMessageRecord>, ConversationKey> {
   late final _getMessages = ref.read(getConversationMessagesUseCaseProvider);
   late final _appendMessage = ref.read(appendMessageUseCaseProvider);
+  late final ConversationId _conversationId;
+  late final ProjectId _projectId;
 
   @override
   Future<List<ConversationMessageRecord>> build(ConversationKey arg) async {
+    _conversationId = arg.conversationId;
+    _projectId = arg.projectId;
     return _getMessages.execute(
       projectId: arg.projectId,
       conversationId: arg.conversationId,
@@ -53,7 +57,7 @@ class ConversationController
 
     final pipelineExecutor = PipelineExecutor(registry);
 
-    final context = PipelineContext(input: text);
+    final context = PipelineContext(input: text, conversationId: _conversationId, projectId: _projectId);
     
     final pipelineResult = await pipelineExecutor.execute(
       Pipeline(
@@ -67,7 +71,8 @@ class ConversationController
           'post.output_normalization',
           'post.chunking',
           'post.artifact_enrichment',
-          'post.semantic_linking'],
+          'post.semantic_linking',
+          'post.incremental_summary'],
         enabled: true
       ),
       context,

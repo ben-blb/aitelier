@@ -4,6 +4,7 @@ import 'package:aitelier/application/artifacts/processors/generic_artifact_proce
 import 'package:aitelier/core/dependencies.dart';
 import 'package:aitelier/domain/repositories/knowledge_chunk_repository.dart';
 import 'package:aitelier/domain/repositories/knowledge_embedding_repository.dart';
+import 'package:aitelier/domain/repositories/summary_repository.dart';
 import 'package:aitelier/domain/services/conversation_git_hook.dart';
 import 'package:aitelier/domain/services/secret_storage.dart';
 import 'package:aitelier/infrastructure/artifacts/index/artifact_index_service.dart';
@@ -24,6 +25,8 @@ import 'package:aitelier/infrastructure/knowledge/persistence/knowledge_chunk_da
 import 'package:aitelier/infrastructure/knowledge/persistence/knowledge_embedding_dao.dart';
 import 'package:aitelier/infrastructure/knowledge/persistence/sqlite_knowledge_chunk_repository.dart';
 import 'package:aitelier/infrastructure/knowledge/persistence/sqlite_knowledge_embedding_repository.dart';
+import 'package:aitelier/infrastructure/knowledge/summary/sqlite_summary_repository.dart';
+import 'package:aitelier/infrastructure/knowledge/summary/summary_dao.dart';
 import 'package:aitelier/infrastructure/knowledge/vector_store/sqlite_vector_store.dart';
 import 'package:aitelier/infrastructure/knowledge/vector_store/sqlite_vss/sqlite_vss_vector_store.dart';
 import 'package:aitelier/infrastructure/knowledge/vector_store/sqlite_vss/vss_capability_detector.dart';
@@ -227,5 +230,17 @@ final knowledgeChunkRepositoryProvider =
 
   return SqliteKnowledgeChunkRepository(
     KnowledgeChunkDao(db),
+  );
+});
+
+final summaryDaoProvider = Provider<SummaryDao>((ref) {
+  final db = ref.read(appDatabaseProvider);
+  return SummaryDao(db);
+});
+
+final summaryRepositoryProvider =
+    Provider<SummaryRepository>((ref) {
+  return SqliteSummaryRepository(
+    ref.read(summaryDaoProvider),
   );
 });
